@@ -118,7 +118,16 @@ def resolve_vcodec(vcodec: str) -> str:
 
 def get_safe_default_codec():
     if importlib.util.find_spec("torchcodec"):
-        return "torchcodec"
+        try:
+            from torchcodec.decoders import VideoDecoder  # noqa: F401
+
+            return "torchcodec"
+        except Exception:
+            logger.warning(
+                "'torchcodec' is installed but could not be loaded (likely missing FFmpeg shared libraries), "
+                "falling back to 'pyav' as a default decoder"
+            )
+            return "pyav"
     else:
         logger.warning(
             "'torchcodec' is not available in your platform, falling back to 'pyav' as a default decoder"
