@@ -10,14 +10,3 @@ same_network: true
 main_training_function: main
 mixed_precision: bf16
 use_cpu: false
-environment:
-  - name: NCCL_IB_DISABLE
-    value: "0"
-  - name: NCCL_IB_HCA
-    value: rocep1s0f1
-  - name: NCCL_IB_GID_INDEX
-    value: "3"
-  - name: NCCL_NET_GDR_LEVEL
-    value: "2"
-  - name: NCCL_SOCKET_IFNAME
-    value: enp1s0f1np1
