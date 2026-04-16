@@ -199,6 +199,7 @@ class KittingInferenceNode(Node):
             action_out = self.postprocessor(action)
 
         action_np = action_out.cpu().numpy().squeeze(0)  # (8,)
+        print(action_np)
         self._publish_action(action_np)
 
 
