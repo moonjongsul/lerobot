@@ -23,6 +23,7 @@ venv.bak/
 __pypackages__/
 node_modules/
 checkpoints/
+Log/
 
 # Lock files
 poetry.lock

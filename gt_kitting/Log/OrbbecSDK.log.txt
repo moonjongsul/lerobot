@@ -1,0 +1,501 @@
+[04/13 12:54:18.670739][info][273202][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 12:54:18.670810][info][273202][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 12:54:18.670814][info][273202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 12:54:18.670816][info][273202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 12:54:18.670820][info][273202][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 12:54:20.675593][info][273202][DeviceManager.cpp:25] Current device(s) list: (2)
+[04/13 12:54:20.675639][info][273202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 12:54:20.675642][info][273202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 12:54:20.676007][warning][273202][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:54:20.676016][warning][273202][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:54:20.676027][warning][273202][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:54:20.680274][info][273202][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 12:54:20.680369][warning][273202][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:54:20.680379][warning][273202][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:54:20.680393][warning][273202][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:54:20.684235][info][273202][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY35C3200EM FW: 1.4.92
+[04/13 12:54:20.688037][info][273202][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 12:54:20.688048][info][273202][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 12:54:20.688365][info][273202][Pipeline.cpp:42] [AY35C3200EM] Pipeline created with device: {name: Gemini 2, sn: AY35C3200EM}, @0x2AA88A00
+[04/13 12:54:20.693088][info][273202][Pipeline.cpp:216] [AY35C3200EM] Check and set config done!
+[04/13 12:54:20.693288][info][273202][Pipeline.cpp:254] [AY35C3200EM] Try to start streams!
+[04/13 12:54:20.693297][info][273202][VideoSensor.cpp:58] [AY35C3200EM] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 12:54:20.693305][info][273202][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STARTING@Color
+[04/13 12:54:20.693312][info][273202][VideoSensor.cpp:127] [AY35C3200EM] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 12:54:20.701137][info][273202][Pipeline.cpp:270] [AY35C3200EM] Start streams done!
+[04/13 12:54:20.701166][info][273202][Pipeline.cpp:238] [AY35C3200EM] Pipeline start done!
+[04/13 12:54:20.829250][info][273751][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STREAMING@Color
+[04/13 12:54:21.738616][warning][273202][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:54:21.738668][warning][273202][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:54:21.738687][warning][273202][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:54:21.743034][info][273202][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 12:54:21.743125][info][273202][Pipeline.cpp:42] [AY3794301V0] Pipeline created with device: {name: Gemini 2, sn: AY3794301V0}, @0x29306300
+[04/13 12:54:21.750183][info][273202][Pipeline.cpp:216] [AY3794301V0] Check and set config done!
+[04/13 12:54:21.750384][info][273202][Pipeline.cpp:254] [AY3794301V0] Try to start streams!
+[04/13 12:54:21.750407][info][273202][VideoSensor.cpp:58] [AY3794301V0] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 12:54:21.750413][info][273202][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STARTING@Color
+[04/13 12:54:21.750420][info][273202][VideoSensor.cpp:127] [AY3794301V0] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 12:54:21.755419][info][273202][Pipeline.cpp:270] [AY3794301V0] Start streams done!
+[04/13 12:54:21.755430][info][273202][Pipeline.cpp:238] [AY3794301V0] Pipeline start done!
+[04/13 12:54:21.883557][info][273801][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STREAMING@Color
+[04/13 12:54:25.862445][info][273751][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.200676fps
+[04/13 12:54:25.866604][info][273759][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.212681fps
+[04/13 12:54:26.917015][info][273801][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.200676fps
+[04/13 12:54:26.920844][info][273804][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.218687fps
+[04/13 12:54:30.895828][info][273751][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:54:30.903714][info][273759][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.978161fps
+[04/13 12:54:31.861339][info][273202][Pipeline.cpp:336] [AY35C3200EM] Try to stop pipeline!
+[04/13 12:54:31.861383][info][273202][Pipeline.cpp:312] [AY35C3200EM] Try to stop streams!
+[04/13 12:54:31.861407][info][273202][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STOPPING@Color
+[04/13 12:54:31.867957][info][273202][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STOPPED@Color
+[04/13 12:54:31.868042][info][273202][Pipeline.cpp:326] [AY35C3200EM] Sensor stream stopped, sensorType=Color
+[04/13 12:54:31.868046][info][273202][Pipeline.cpp:332] [AY35C3200EM] Stop streams done!
+[04/13 12:54:31.868250][info][273202][Pipeline.cpp:356] [AY35C3200EM] Stop pipeline done!
+[04/13 12:54:31.868260][info][273202][Pipeline.cpp:53] [AY35C3200EM] Pipeline destroyed! @0x2AA88A00
+[04/13 12:54:31.868388][info][273202][SensorBase.cpp:47] [AY35C3200EM] SensorBase is destroyed
+[04/13 12:54:31.869143][info][273202][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 12:54:31.869151][info][273202][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 12:54:31.870613][info][273202][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 12:54:31.870623][info][273202][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 12:54:31.891966][info][273202][Pipeline.cpp:336] [AY3794301V0] Try to stop pipeline!
+[04/13 12:54:31.891997][info][273202][Pipeline.cpp:312] [AY3794301V0] Try to stop streams!
+[04/13 12:54:31.892018][info][273202][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STOPPING@Color
+[04/13 12:54:31.900810][info][273202][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STOPPED@Color
+[04/13 12:54:31.900978][info][273202][Pipeline.cpp:326] [AY3794301V0] Sensor stream stopped, sensorType=Color
+[04/13 12:54:31.900985][info][273202][Pipeline.cpp:332] [AY3794301V0] Stop streams done!
+[04/13 12:54:31.901133][info][273202][Pipeline.cpp:356] [AY3794301V0] Stop pipeline done!
+[04/13 12:54:31.901160][info][273202][Pipeline.cpp:53] [AY3794301V0] Pipeline destroyed! @0x29306300
+[04/13 12:54:31.901245][info][273202][SensorBase.cpp:47] [AY3794301V0] SensorBase is destroyed
+[04/13 12:54:31.902056][info][273202][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 12:54:31.902062][info][273202][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 12:54:31.905684][info][273202][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 12:54:31.905711][info][273202][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 12:56:20.790519][info][275855][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 12:56:20.790582][info][275855][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 12:56:20.790586][info][275855][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 12:56:20.790589][info][275855][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 12:56:20.790593][info][275855][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 12:56:22.796521][info][275855][DeviceManager.cpp:25] Current device(s) list: (2)
+[04/13 12:56:22.796580][info][275855][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 12:56:22.796585][info][275855][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 12:56:22.796997][warning][275855][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:56:22.797047][warning][275855][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:56:22.797070][warning][275855][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:56:22.801873][info][275855][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 12:56:22.802035][warning][275855][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:56:22.802047][warning][275855][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:56:22.802066][warning][275855][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:56:22.806810][info][275855][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY35C3200EM FW: 1.4.92
+[04/13 12:56:22.810744][info][275855][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 12:56:22.810784][info][275855][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 12:56:22.811180][info][275855][Pipeline.cpp:42] [AY35C3200EM] Pipeline created with device: {name: Gemini 2, sn: AY35C3200EM}, @0x5850D740
+[04/13 12:56:22.816446][info][275855][Pipeline.cpp:216] [AY35C3200EM] Check and set config done!
+[04/13 12:56:22.816654][info][275855][Pipeline.cpp:254] [AY35C3200EM] Try to start streams!
+[04/13 12:56:22.816662][info][275855][VideoSensor.cpp:58] [AY35C3200EM] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 12:56:22.816668][info][275855][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STARTING@Color
+[04/13 12:56:22.816674][info][275855][VideoSensor.cpp:127] [AY35C3200EM] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 12:56:22.821603][info][275855][Pipeline.cpp:270] [AY35C3200EM] Start streams done!
+[04/13 12:56:22.821615][info][275855][Pipeline.cpp:238] [AY35C3200EM] Pipeline start done!
+[04/13 12:56:22.949959][info][276915][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STREAMING@Color
+[04/13 12:56:23.860386][warning][275855][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:56:23.860437][warning][275855][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:56:23.860451][warning][275855][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:56:23.864914][info][275855][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 12:56:23.865015][info][275855][Pipeline.cpp:42] [AY3794301V0] Pipeline created with device: {name: Gemini 2, sn: AY3794301V0}, @0x51B62640
+[04/13 12:56:23.872683][info][275855][Pipeline.cpp:216] [AY3794301V0] Check and set config done!
+[04/13 12:56:23.872885][info][275855][Pipeline.cpp:254] [AY3794301V0] Try to start streams!
+[04/13 12:56:23.872894][info][275855][VideoSensor.cpp:58] [AY3794301V0] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 12:56:23.872901][info][275855][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STARTING@Color
+[04/13 12:56:23.872908][info][275855][VideoSensor.cpp:127] [AY3794301V0] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 12:56:23.877936][info][275855][Pipeline.cpp:270] [AY3794301V0] Start streams done!
+[04/13 12:56:23.877950][info][275855][Pipeline.cpp:238] [AY3794301V0] Pipeline start done!
+[04/13 12:56:23.893868][warning][276915][VideoSensor.cpp:184] [AY35C3200EM] This frame will be dropped because jpg format verification failure! @Color
+[04/13 12:56:23.988327][warning][276981][VideoSensor.cpp:184] [AY3794301V0] This frame will be dropped because jpg format verification failure! @Color
+[04/13 12:56:24.039227][info][276981][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STREAMING@Color
+[04/13 12:56:26.918490][warning][276986][VideoSensor.cpp:184] [AY35C3200EM] This frame will be dropped because jpg format verification failure! @Color [**1 logs in 3024ms, last: 12:56:23.918235**]
+[04/13 12:56:26.989785][warning][276988][VideoSensor.cpp:184] [AY3794301V0] This frame will be dropped because jpg format verification failure! @Color [**3 logs in 3001ms, last: 12:56:24.016426**]
+[04/13 12:56:27.982982][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.200676fps
+[04/13 12:56:27.986901][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.821072fps
+[04/13 12:56:29.005983][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.695633fps
+[04/13 12:56:29.077130][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.218687fps
+[04/13 12:56:32.983076][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.994001fps
+[04/13 12:56:32.991633][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.970030fps
+[04/13 12:56:34.006052][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.994001fps
+[04/13 12:56:34.116940][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.966263fps
+[04/13 12:56:38.016450][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:38.020732][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.025850fps
+[04/13 12:56:39.039491][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:39.145926][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.025850fps
+[04/13 12:56:43.049805][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:43.054216][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.996027fps
+[04/13 12:56:44.072963][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:44.177462][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.007948fps
+[04/13 12:56:48.058067][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.976019fps
+[04/13 12:56:48.083210][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.996027fps
+[04/13 12:56:49.073079][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.994001fps
+[04/13 12:56:49.210247][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.001987fps
+[04/13 12:56:53.092427][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.996027fps
+[04/13 12:56:53.117003][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:54.106509][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:54.244072][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.996027fps
+[04/13 12:56:58.121055][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.025850fps
+[04/13 12:56:58.149927][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:59.139977][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:56:59.277052][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.001987fps
+[04/13 12:57:03.154292][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.001987fps
+[04/13 12:57:03.183325][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.996027fps
+[04/13 12:57:04.173342][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.996027fps
+[04/13 12:57:04.311998][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.996027fps
+[04/13 12:57:08.186991][info][276938][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.007948fps
+[04/13 12:57:08.216681][info][276915][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:57:09.206801][info][276981][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 12:57:09.344588][info][277003][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.001987fps
+[04/13 12:58:13.565915][warning][281712][UsbEnumeratorLibusb.cpp:399] Failed to open USB device: error=No such device (it may have been disconnected). Try again
+[04/13 12:58:13.616038][warning][281712][UsbEnumeratorLibusb.cpp:403] Failed to open USB device (No such device (it may have been disconnected)), skipping, info.serial and infName may be empty
+[04/13 12:58:13.616786][info][281712][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 12:58:13.616807][info][281712][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 12:58:13.616811][info][281712][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 12:58:13.616814][info][281712][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 12:58:13.616818][info][281712][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 12:58:15.621353][info][281712][DeviceManager.cpp:25] Current device(s) list: (2)
+[04/13 12:58:15.621405][info][281712][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 12:58:15.621410][info][281712][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 12:58:15.621761][warning][281712][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:58:15.621773][warning][281712][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:58:15.621791][warning][281712][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:58:15.625606][info][281712][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 12:58:15.625699][warning][281712][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 12:58:15.625708][warning][281712][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 12:58:15.625722][warning][281712][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 12:58:15.625783][warning][281712][ObException.cpp:8] Can not open device: 6-1.3.3-0
+[04/13 12:58:15.632230][warning][281712][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.3-0
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 12:58:15.632275][warning][281712][ObException.cpp:8] Can not open device: 6-1.3.3-0
+[04/13 12:58:15.632282][warning][281712][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.3-0
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 12:58:15.632286][warning][281712][ObException.hpp:48] usbEnumerator openUsbDevice failed!
+[04/13 12:58:15.633442][warning][281712][ObException.cpp:8] Can not open device: 6-1.3.3-0
+[04/13 12:58:15.633453][warning][281712][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.3-0
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 12:58:15.633474][warning][281712][ObException.cpp:8] Can not open device: 6-1.3.3-0
+[04/13 12:58:15.633479][warning][281712][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.3-0
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 12:58:15.633481][warning][281712][ObException.hpp:48] usbEnumerator openUsbDevice failed!
+[04/13 12:58:15.633493][warning][281712][DeviceBase.cpp:343] Execute failure! A libobsensor_exception has occurred!
+ - where: DeviceBase.cpp(343):getComponent
+ - msg: usbEnumerator openUsbDevice failed!
+ - type: N11libobsensor29camera_disconnected_exceptionE
+[04/13 13:01:25.436815][info][291574][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 13:01:25.436876][info][291574][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 13:01:25.436882][info][291574][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:01:25.436884][info][291574][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:01:25.436889][info][291574][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 13:01:27.442003][info][291574][DeviceManager.cpp:25] Current device(s) list: (2)
+[04/13 13:01:27.442048][info][291574][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:01:27.442053][info][291574][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:01:27.442403][warning][291574][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:01:27.442413][warning][291574][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:01:27.442429][warning][291574][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:01:27.446506][info][291574][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 13:01:27.446593][warning][291574][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:01:27.446600][warning][291574][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:01:27.446613][warning][291574][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:01:27.451324][info][291574][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY35C3200EM FW: 1.4.92
+[04/13 13:01:27.453209][info][291574][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 13:01:27.453242][info][291574][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 13:01:27.453656][info][291574][Pipeline.cpp:42] [AY35C3200EM] Pipeline created with device: {name: Gemini 2, sn: AY35C3200EM}, @0x392E65A0
+[04/13 13:01:27.458343][info][291574][Pipeline.cpp:216] [AY35C3200EM] Check and set config done!
+[04/13 13:01:27.458544][info][291574][Pipeline.cpp:254] [AY35C3200EM] Try to start streams!
+[04/13 13:01:27.458551][info][291574][VideoSensor.cpp:58] [AY35C3200EM] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 13:01:27.458557][info][291574][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STARTING@Color
+[04/13 13:01:27.458563][info][291574][VideoSensor.cpp:127] [AY35C3200EM] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 13:01:27.463748][info][291574][Pipeline.cpp:270] [AY35C3200EM] Start streams done!
+[04/13 13:01:27.463785][info][291574][Pipeline.cpp:238] [AY35C3200EM] Pipeline start done!
+[04/13 13:01:27.591775][info][292741][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STREAMING@Color
+[04/13 13:01:28.501831][warning][291574][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:01:28.501914][warning][291574][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:01:28.501938][warning][291574][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:01:28.506405][info][291574][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 13:01:28.506497][info][291574][Pipeline.cpp:42] [AY3794301V0] Pipeline created with device: {name: Gemini 2, sn: AY3794301V0}, @0x2CDFB880
+[04/13 13:01:28.513854][info][291574][Pipeline.cpp:216] [AY3794301V0] Check and set config done!
+[04/13 13:01:28.514052][info][291574][Pipeline.cpp:254] [AY3794301V0] Try to start streams!
+[04/13 13:01:28.514061][info][291574][VideoSensor.cpp:58] [AY3794301V0] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 13:01:28.514068][info][291574][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STARTING@Color
+[04/13 13:01:28.514075][info][291574][VideoSensor.cpp:127] [AY3794301V0] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 13:01:28.521773][info][291574][Pipeline.cpp:270] [AY3794301V0] Start streams done!
+[04/13 13:01:28.521781][info][291574][Pipeline.cpp:238] [AY3794301V0] Pipeline start done!
+[04/13 13:01:28.649844][info][292808][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STREAMING@Color
+[04/13 13:01:32.625042][info][292741][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.194677fps
+[04/13 13:01:32.629681][info][292760][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.206676fps
+[04/13 13:01:33.683164][info][292808][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.194677fps
+[04/13 13:01:33.687707][info][292815][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.212681fps
+[04/13 13:01:37.658413][info][292741][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:01:37.662916][info][292760][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.001987fps
+[04/13 13:01:38.716599][info][292808][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:01:38.721040][info][292815][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.996027fps
+[04/13 13:01:42.691794][info][292741][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:01:42.695730][info][292760][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.001987fps
+[04/13 13:01:43.725268][info][292815][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.976019fps
+[04/13 13:01:43.750037][info][292808][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.996027fps
+[04/13 13:01:47.700165][info][292760][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.970030fps
+[04/13 13:01:47.725314][info][292741][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.996027fps
+[04/13 13:01:48.754139][info][292815][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.025850fps
+[04/13 13:01:48.783461][info][292808][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:01:52.728740][info][292760][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.031822fps
+[04/13 13:01:52.758532][info][292741][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:01:53.788528][info][292815][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.996027fps
+[04/13 13:01:53.816903][info][292808][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:01:57.762142][info][292760][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.996027fps
+[04/13 13:01:57.791924][info][292741][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:02:44.899537][info][295908][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 13:02:44.899630][info][295908][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 13:02:44.899636][info][295908][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:02:44.899639][info][295908][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:02:44.899644][info][295908][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 13:02:46.904060][info][295908][DeviceManager.cpp:25] Current device(s) list: (2)
+[04/13 13:02:46.904107][info][295908][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:02:46.904111][info][295908][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:02:46.904374][warning][295908][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:02:46.904384][warning][295908][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:02:46.904396][warning][295908][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:02:46.909161][info][295908][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 13:02:46.909232][warning][295908][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:02:46.909238][warning][295908][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:02:46.909248][warning][295908][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:02:46.913286][info][295908][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY35C3200EM FW: 1.4.92
+[04/13 13:02:46.917126][info][295908][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 13:02:46.917145][info][295908][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 13:02:46.917524][info][295908][Pipeline.cpp:42] [AY35C3200EM] Pipeline created with device: {name: Gemini 2, sn: AY35C3200EM}, @0x3A4B1FB0
+[04/13 13:02:46.922538][info][295908][Pipeline.cpp:216] [AY35C3200EM] Check and set config done!
+[04/13 13:02:46.922767][info][295908][Pipeline.cpp:254] [AY35C3200EM] Try to start streams!
+[04/13 13:02:46.922776][info][295908][VideoSensor.cpp:58] [AY35C3200EM] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 13:02:46.922797][info][295908][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STARTING@Color
+[04/13 13:02:46.922806][info][295908][VideoSensor.cpp:127] [AY35C3200EM] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 13:02:46.930631][info][295908][Pipeline.cpp:270] [AY35C3200EM] Start streams done!
+[04/13 13:02:46.930650][info][295908][Pipeline.cpp:238] [AY35C3200EM] Pipeline start done!
+[04/13 13:02:47.058818][info][297112][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STREAMING@Color
+[04/13 13:02:47.968158][warning][295908][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:02:47.968217][warning][295908][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:02:47.968245][warning][295908][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:02:47.973141][info][295908][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 13:02:47.973244][info][295908][Pipeline.cpp:42] [AY3794301V0] Pipeline created with device: {name: Gemini 2, sn: AY3794301V0}, @0x3EC3A760
+[04/13 13:02:47.981185][info][295908][Pipeline.cpp:216] [AY3794301V0] Check and set config done!
+[04/13 13:02:47.981438][info][295908][Pipeline.cpp:254] [AY3794301V0] Try to start streams!
+[04/13 13:02:47.981451][info][295908][VideoSensor.cpp:58] [AY3794301V0] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 13:02:47.981459][info][295908][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STARTING@Color
+[04/13 13:02:47.981468][info][295908][VideoSensor.cpp:127] [AY3794301V0] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 13:02:47.986575][info][295908][Pipeline.cpp:270] [AY3794301V0] Start streams done!
+[04/13 13:02:47.986592][info][295908][Pipeline.cpp:238] [AY3794301V0] Pipeline start done!
+[04/13 13:02:48.114525][info][297183][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STREAMING@Color
+[04/13 13:02:52.091947][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.200676fps
+[04/13 13:02:52.095714][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.212681fps
+[04/13 13:02:53.147956][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.200676fps
+[04/13 13:02:53.152030][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.212681fps
+[04/13 13:02:57.092035][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.994001fps
+[04/13 13:02:57.099472][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.976019fps
+[04/13 13:02:58.148052][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.994001fps
+[04/13 13:02:58.185205][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.001987fps
+[04/13 13:03:02.125443][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:02.130213][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.013912fps
+[04/13 13:03:03.181469][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:03.186306][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.994001fps
+[04/13 13:03:07.133353][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.982012fps
+[04/13 13:03:07.158700][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:08.214940][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:08.218865][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.007948fps
+[04/13 13:03:12.162548][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.025850fps
+[04/13 13:03:12.192070][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.996027fps
+[04/13 13:03:13.215033][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.994001fps
+[04/13 13:03:13.219770][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.994001fps
+[04/13 13:03:17.196032][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.996027fps
+[04/13 13:03:17.225469][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:18.248479][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:18.253378][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.996027fps
+[04/13 13:03:22.229257][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.001987fps
+[04/13 13:03:22.258863][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:23.281920][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:23.285955][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.007948fps
+[04/13 13:03:27.233439][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.976019fps
+[04/13 13:03:27.292239][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.996027fps
+[04/13 13:03:28.282064][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.994001fps
+[04/13 13:03:28.286559][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.994001fps
+[04/13 13:03:32.263494][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.019880fps
+[04/13 13:03:32.325658][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:33.315472][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:33.319354][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.001987fps
+[04/13 13:03:37.296846][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.001987fps
+[04/13 13:03:37.358982][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:38.335152][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.904308fps
+[04/13 13:03:38.348910][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:42.330137][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.996027fps
+[04/13 13:03:42.359037][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=29.994001fps
+[04/13 13:03:43.353579][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.091669fps
+[04/13 13:03:43.382324][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=29.996027fps
+[04/13 13:03:47.334986][info][297128][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.976019fps
+[04/13 13:03:47.392644][info][297112][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:48.357249][info][297195][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=29.976019fps
+[04/13 13:03:48.415763][info][297183][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:03:51.420879][warning][297195][Pipeline.cpp:295] [AY3794301V0] Output frameset queue is full, drop oldest frameset!
+[04/13 13:03:51.433327][warning][297128][Pipeline.cpp:295] [AY35C3200EM] Output frameset queue is full, drop oldest frameset!
+[04/13 13:04:57.140864][warning][303202][UsbEnumeratorLibusb.cpp:399] Failed to open USB device: error=Input/Output Error. Try again
+[04/13 13:04:57.191011][warning][303202][UsbEnumeratorLibusb.cpp:403] Failed to open USB device (No such device (it may have been disconnected)), skipping, info.serial and infName may be empty
+[04/13 13:04:57.226704][warning][303202][UsbEnumeratorLibusb.cpp:399] Failed to open USB device: error=Input/Output Error. Try again
+[04/13 13:04:57.276854][warning][303202][UsbEnumeratorLibusb.cpp:403] Failed to open USB device (Input/Output Error), skipping, info.serial and infName may be empty
+[04/13 13:04:57.277740][info][303202][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 13:04:57.277761][info][303202][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 13:04:57.277766][info][303202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:04:57.277769][info][303202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:04:57.277774][info][303202][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 13:04:57.525845][info][304290][DeviceManager.cpp:266] Device changed! removed: 1, added: 0
+[04/13 13:04:57.525885][info][304290][DeviceManager.cpp:25] Removed device(s) list: (1)
+[04/13 13:04:57.525891][info][304290][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:04:57.525896][info][304290][DeviceManager.cpp:25] Current device(s) list: (1)
+[04/13 13:04:57.525899][info][304290][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:04:58.840560][info][304393][DeviceManager.cpp:266] Device changed! removed: 0, added: 2
+[04/13 13:04:58.840617][info][304393][DeviceManager.cpp:25] Current device(s) list: (3)
+[04/13 13:04:58.840625][info][304393][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:04:58.840628][info][304393][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:04:58.840630][info][304393][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:04:59.284012][info][303202][DeviceManager.cpp:25] Current device(s) list: (3)
+[04/13 13:04:59.284085][info][303202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:04:59.284093][info][303202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:04:59.284097][info][303202][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:04:59.284587][warning][303202][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:04:59.284612][warning][303202][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:04:59.284648][warning][303202][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:04:59.284812][warning][303202][ObException.cpp:8] Can not open device: 6-1.3.2-10
+[04/13 13:04:59.284997][warning][303202][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-10
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:04:59.285087][warning][303202][ObException.cpp:8] Can not open device: 6-1.3.2-10
+[04/13 13:04:59.285104][warning][303202][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-10
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:04:59.285110][warning][303202][ObException.hpp:48] usbEnumerator openUsbDevice failed!
+[04/13 13:04:59.285248][warning][303202][ObException.cpp:8] Can not open device: 6-1.3.2-10
+[04/13 13:04:59.285273][warning][303202][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-10
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:04:59.285295][warning][303202][ObException.cpp:8] Can not open device: 6-1.3.2-10
+[04/13 13:04:59.285300][warning][303202][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-10
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:04:59.285301][warning][303202][ObException.hpp:48] usbEnumerator openUsbDevice failed!
+[04/13 13:04:59.285314][warning][303202][DeviceBase.cpp:343] Execute failure! A libobsensor_exception has occurred!
+ - where: DeviceBase.cpp(343):getComponent
+ - msg: usbEnumerator openUsbDevice failed!
+ - type: N11libobsensor29camera_disconnected_exceptionE
+[04/13 13:08:43.195210][info][314751][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 13:08:43.195274][info][314751][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 13:08:43.195279][info][314751][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:08:43.195281][info][314751][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:08:43.195284][info][314751][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 13:08:45.199500][info][314751][DeviceManager.cpp:25] Current device(s) list: (2)
+[04/13 13:08:45.199538][info][314751][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:08:45.199542][info][314751][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:08:45.199845][warning][314751][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:08:45.199853][warning][314751][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:08:45.199865][warning][314751][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:08:45.204274][info][314751][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 13:08:45.204365][warning][314751][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:08:45.204373][warning][314751][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:08:45.204384][warning][314751][PropertyServer.cpp:87] [AY35C3200EM] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:08:45.208472][info][314751][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY35C3200EM FW: 1.4.92
+[04/13 13:08:45.212318][info][314751][ObLibuvcDevicePort.cpp:87] uvc_close done.
+[04/13 13:08:45.212347][info][314751][ObLibuvcDevicePort.cpp:88] ~ObLibuvcDevicePort done
+[04/13 13:08:45.212749][info][314751][Pipeline.cpp:42] [AY35C3200EM] Pipeline created with device: {name: Gemini 2, sn: AY35C3200EM}, @0x29E9D2C0
+[04/13 13:08:45.218245][info][314751][Pipeline.cpp:216] [AY35C3200EM] Check and set config done!
+[04/13 13:08:45.218716][info][314751][Pipeline.cpp:254] [AY35C3200EM] Try to start streams!
+[04/13 13:08:45.218752][info][314751][VideoSensor.cpp:58] [AY35C3200EM] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 13:08:45.218763][info][314751][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STARTING@Color
+[04/13 13:08:45.218774][info][314751][VideoSensor.cpp:127] [AY35C3200EM] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 13:08:45.223925][info][314751][Pipeline.cpp:270] [AY35C3200EM] Start streams done!
+[04/13 13:08:45.223953][info][314751][Pipeline.cpp:238] [AY35C3200EM] Pipeline start done!
+[04/13 13:08:45.352028][info][315930][SensorBase.cpp:213] [AY35C3200EM] Stream state changed to STREAMING@Color
+[04/13 13:08:46.260141][warning][314751][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:08:46.260182][warning][314751][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:08:46.260194][warning][314751][PropertyServer.cpp:87] [AY3794301V0] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:08:46.264606][info][314751][DeviceManager.cpp:194] Device created successfully! Name: Gemini 2, PID: 0x0670, SN/ID: AY3794301V0 FW: 1.4.92
+[04/13 13:08:46.264706][info][314751][Pipeline.cpp:42] [AY3794301V0] Pipeline created with device: {name: Gemini 2, sn: AY3794301V0}, @0x2E614350
+[04/13 13:08:46.271401][info][314751][Pipeline.cpp:216] [AY3794301V0] Check and set config done!
+[04/13 13:08:46.271602][info][314751][Pipeline.cpp:254] [AY3794301V0] Try to start streams!
+[04/13 13:08:46.271610][info][314751][VideoSensor.cpp:58] [AY3794301V0] Try to start stream: {type: Color, format: RGB, width: 1280, height: 720, fps: 30}
+[04/13 13:08:46.271618][info][314751][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STARTING@Color
+[04/13 13:08:46.271625][info][314751][VideoSensor.cpp:127] [AY3794301V0] Start backend stream: {type: Color, format: MJPG, width: 1280, height: 720, fps: 30}
+[04/13 13:08:46.276707][info][314751][Pipeline.cpp:270] [AY3794301V0] Start streams done!
+[04/13 13:08:46.276715][info][314751][Pipeline.cpp:238] [AY3794301V0] Pipeline start done!
+[04/13 13:08:46.404738][info][315998][SensorBase.cpp:213] [AY3794301V0] Stream state changed to STREAMING@Color
+[04/13 13:08:50.385293][info][315930][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.200676fps
+[04/13 13:08:50.388972][info][315942][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=30.206676fps
+[04/13 13:08:51.412780][info][316005][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.193962fps
+[04/13 13:08:51.438108][info][315998][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.194677fps
+[04/13 13:08:55.389272][info][315942][SensorBase.cpp:370] [AY35C3200EM] Color Streaming... frameRate=29.994001fps
+[04/13 13:08:55.418631][info][315930][VideoSensor.cpp:153] [AY35C3200EM] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:08:56.442489][info][316005][SensorBase.cpp:370] [AY3794301V0] Color Streaming... frameRate=30.019880fps
+[04/13 13:08:56.471517][info][315998][VideoSensor.cpp:153] [AY3794301V0] Color backend frame callback, frameRate=30.001987fps
+[04/13 13:08:58.322568][warning][315942][Pipeline.cpp:295] [AY35C3200EM] Output frameset queue is full, drop oldest frameset!
+[04/13 13:08:58.342381][warning][316005][Pipeline.cpp:295] [AY3794301V0] Output frameset queue is full, drop oldest frameset!
+[04/13 13:10:10.999402][warning][319612][UsbEnumeratorLibusb.cpp:399] Failed to open USB device: error=Input/Output Error. Try again
+[04/13 13:10:11.049559][warning][319612][UsbEnumeratorLibusb.cpp:403] Failed to open USB device (No such device (it may have been disconnected)), skipping, info.serial and infName may be empty
+[04/13 13:10:11.083738][warning][319612][UsbEnumeratorLibusb.cpp:399] Failed to open USB device: error=Input/Output Error. Try again
+[04/13 13:10:11.133930][warning][319612][UsbEnumeratorLibusb.cpp:403] Failed to open USB device (Input/Output Error), skipping, info.serial and infName may be empty
+[04/13 13:10:11.134435][info][319612][LinuxUsbPal.cpp:335] Create PollingDeviceWatcher!
+[04/13 13:10:11.134452][info][319612][DeviceManager.cpp:25] Current found device(s): (2)
+[04/13 13:10:11.134455][info][319612][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:10:11.134467][info][319612][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:10:11.134470][info][319612][DeviceManager.cpp:339] Enable net device enumeration: true
+[04/13 13:10:11.381984][info][320841][DeviceManager.cpp:266] Device changed! removed: 1, added: 0
+[04/13 13:10:11.382035][info][320841][DeviceManager.cpp:25] Removed device(s) list: (1)
+[04/13 13:10:11.382041][info][320841][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:10:11.382047][info][320841][DeviceManager.cpp:25] Current device(s) list: (1)
+[04/13 13:10:11.382049][info][320841][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:10:12.696282][info][320956][DeviceManager.cpp:266] Device changed! removed: 0, added: 2
+[04/13 13:10:12.696342][info][320956][DeviceManager.cpp:25] Current device(s) list: (3)
+[04/13 13:10:12.696349][info][320956][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:10:12.696352][info][320956][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:10:12.696354][info][320956][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:10:13.138686][info][319612][DeviceManager.cpp:25] Current device(s) list: (3)
+[04/13 13:10:13.138724][info][319612][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: , Connection: USB3.0
+[04/13 13:10:13.138728][info][319612][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY35C3200EM, Connection: USB3.0
+[04/13 13:10:13.138729][info][319612][DeviceManager.cpp:34] 	- Name: Gemini2, PID: 0x0670, SN/ID: AY3794301V0, Connection: USB3.0
+[04/13 13:10:13.139030][warning][319612][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=108
+[04/13 13:10:13.139038][warning][319612][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=4035
+[04/13 13:10:13.139049][warning][319612][PropertyServer.cpp:87] [] Not added to property map, property not found in OBPropertyBaseInfoMap, id=5003
+[04/13 13:10:13.139114][warning][319612][ObException.cpp:8] Can not open device: 6-1.3.2-11
+[04/13 13:10:13.139160][warning][319612][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-11
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:10:13.139177][warning][319612][ObException.cpp:8] Can not open device: 6-1.3.2-11
+[04/13 13:10:13.139181][warning][319612][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-11
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:10:13.139183][warning][319612][ObException.hpp:48] usbEnumerator openUsbDevice failed!
+[04/13 13:10:13.139246][warning][319612][ObException.cpp:8] Can not open device: 6-1.3.2-11
+[04/13 13:10:13.139251][warning][319612][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-11
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:10:13.139265][warning][319612][ObException.cpp:8] Can not open device: 6-1.3.2-11
+[04/13 13:10:13.139268][warning][319612][UsbEnumeratorLibusb.cpp:458] Execute failure! A libobsensor_exception has occurred!
+ - where: UsbEnumeratorLibusb.cpp(458):openUsbDevice
+ - msg: Can not open device: 6-1.3.2-11
+ - type: N11libobsensor23invalid_value_exceptionE
+[04/13 13:10:13.139269][warning][319612][ObException.hpp:48] usbEnumerator openUsbDevice failed!
+[04/13 13:10:13.139278][warning][319612][DeviceBase.cpp:343] Execute failure! A libobsensor_exception has occurred!
+ - where: DeviceBase.cpp(343):getComponent
+ - msg: usbEnumerator openUsbDevice failed!
+ - type: N11libobsensor29camera_disconnected_exceptionE
