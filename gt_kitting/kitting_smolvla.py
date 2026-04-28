@@ -38,9 +38,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ---- Config ----
-CHECKPOINT_PATH = "/home/keti10829/workspace/lerobot/checkpoints/local_260410/smolvla_kitting_finetuning_b32/checkpoints/060000/pretrained_model"
-TASK_DESCRIPTION = "Pick part, flip or rotate to correct orientation, and place into kitting tray."
-# TASK_DESCRIPTION = "pick part."
+CHECKPOINT_PATH = "/workspace/m.ax/checkpoints/smolvla_kitting_joint_b32/smolvla_kitting_scratch_b32/checkpoints/016000/pretrained_model"
+# TASK_DESCRIPTION = "Pick part, flip or rotate to correct orientation, and place into kitting tray."
+TASK_DESCRIPTION = "flip object"
 INFERENCE_FPS = 30
 DEVICE = "cuda"
 
