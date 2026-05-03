@@ -41,6 +41,7 @@ from lerobot.scripts.lerobot_eval import eval_policy_all
 from lerobot.utils.import_utils import register_third_party_plugins
 from lerobot.utils.logging_utils import AverageMeter, MetricsTracker
 from lerobot.utils.random_utils import set_seed
+from lerobot.utils.constants import CHECKPOINTS_DIR
 from lerobot.utils.train_utils import (
     get_step_checkpoint_dir,
     get_step_identifier,
@@ -408,6 +409,9 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
             f"Start offline training on a fixed dataset, with effective batch size: {effective_batch_size}"
         )
 
+    best_loss = float("inf")
+    best_min_step = 20000
+
     for _ in range(step, cfg.steps):
         start_time = time.perf_counter()
         batch = next(dl_iter)
@@ -434,6 +438,13 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         is_log_step = cfg.log_freq > 0 and step % cfg.log_freq == 0 and is_main_process
         is_saving_step = step % cfg.save_freq == 0 or step == cfg.steps
         is_eval_step = cfg.eval_freq > 0 and step % cfg.eval_freq == 0
+
+        is_best = False
+        if is_log_step and step >= best_min_step:
+            current_loss = train_tracker.loss.avg
+            if current_loss < best_loss:
+                best_loss = current_loss
+                is_best = True
 
         if is_log_step:
             logging.info(train_tracker)
@@ -472,6 +483,30 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
                 if wandb_logger:
                     wandb_logger.log_policy(checkpoint_dir)
 
+            accelerator.wait_for_everyone()
+
+        if cfg.save_checkpoint and is_best:
+            if is_main_process:
+                step_id = get_step_identifier(step, cfg.steps)
+                logging.info(
+                    f"New best loss {best_loss:.4f} at step {step}; saving best checkpoint"
+                )
+                best_checkpoint_dir = (
+                    cfg.output_dir / CHECKPOINTS_DIR / f"best_{step_id}"
+                )
+                save_checkpoint(
+                    checkpoint_dir=best_checkpoint_dir,
+                    step=step,
+                    cfg=cfg,
+                    policy=accelerator.unwrap_model(policy),
+                    optimizer=optimizer,
+                    scheduler=lr_scheduler,
+                    preprocessor=preprocessor,
+                    postprocessor=postprocessor,
+                )
+                if wandb_logger:
+                    wandb_logger.log_policy(best_checkpoint_dir)
+                    
             accelerator.wait_for_everyone()
 
         if cfg.env and is_eval_step:
