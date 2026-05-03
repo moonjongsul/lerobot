@@ -492,7 +492,7 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
                     f"New best loss {best_loss:.4f} at step {step}; saving best checkpoint"
                 )
                 best_checkpoint_dir = (
-                    cfg.output_dir / CHECKPOINTS_DIR / f"best_{step_id}"
+                    cfg.output_dir / CHECKPOINTS_DIR / f"best_{step_id}_{best_loss:0.6f}"
                 )
                 save_checkpoint(
                     checkpoint_dir=best_checkpoint_dir,
