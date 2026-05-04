@@ -410,7 +410,7 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         )
 
     best_loss = float("inf")
-    best_min_step = 20000
+    best_min_step = cfg.best_loss_warmup_step
 
     for _ in range(step, cfg.steps):
         start_time = time.perf_counter()

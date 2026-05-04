@@ -63,6 +63,9 @@ class TrainPipelineConfig(HubMixin):
     save_checkpoint: bool = True
     # Checkpoint is saved every `save_freq` training iterations and after the last training step.
     save_freq: int = 20_000
+    # Minimum step before tracking best-loss checkpoints. Loss is volatile early in training,
+    # so saving the lowest-loss snapshot only after this warmup avoids capturing a noisy minimum.
+    best_loss_warmup_step: int = 20_000
     use_policy_training_preset: bool = True
     optimizer: OptimizerConfig | None = None
     scheduler: LRSchedulerConfig | None = None
