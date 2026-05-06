@@ -1,7 +1,7 @@
 HDD_PATH='/data/keti/mjs/lerobot'
 
-PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True CUDA_VISIBLE_DEVICES=1,2,3 accelerate launch \
-  --num_processes=3 \
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True CUDA_VISIBLE_DEVICES=0,1 accelerate launch \
+  --num_processes=2 \
   --num_machines=1 \
   --dynamo_backend=no \
   --multi_gpu \
@@ -17,13 +17,13 @@ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True CUDA_VISIBLE_DEVICES=1,2,3 acce
   --policy.train_expert_only=false \
   --policy.scheduler_decay_steps=200000 \
   --policy.optimizer_weight_decay=1e-4 \
-  --dataset.repo_id=moonjongsul/manufacturing_kitting_dataset \
+  --dataset.repo_id=moonjongsul/manufacturing_kitting_dataset_flip_object \
   --dataset.image_transforms.enable=true \
-  --steps=500000 \
+  --steps=300000 \
   --save_freq=5000 \
   --log_freq=100 \
-  --best_loss_warmup_step=30000 \
+  --best_loss_warmup_step=20000 \
   --wandb.enable=true \
   --batch_size=24 \
-  --output_dir=${HDD_PATH}/outputs/smolvla_kitting_rot6d_a6000_b24x3_260504- \
-  --job_name=smolvla_kitting_rot6d_a6000_b24x3_260504-
+  --output_dir=${HDD_PATH}/outputs/smolvla_flip_rot6d_a6000_b24x2_260506 \
+  --job_name=smolvla_flip_rot6d_a6000_b24x2_260506

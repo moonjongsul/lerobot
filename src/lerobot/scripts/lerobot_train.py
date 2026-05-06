@@ -438,13 +438,23 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         is_log_step = cfg.log_freq > 0 and step % cfg.log_freq == 0 and is_main_process
         is_saving_step = step % cfg.save_freq == 0 or step == cfg.steps
         is_eval_step = cfg.eval_freq > 0 and step % cfg.eval_freq == 0
+        is_best_check_step = (
+            cfg.log_freq > 0 and step % cfg.log_freq == 0 and step >= best_min_step
+        )
 
         is_best = False
-        if is_log_step and step >= best_min_step:
-            current_loss = train_tracker.loss.avg
-            if current_loss < best_loss:
-                best_loss = current_loss
-                is_best = True
+        if is_best_check_step:
+            if is_main_process:
+                current_loss = train_tracker.loss.avg
+                if current_loss < best_loss:
+                    best_loss = current_loss
+                    is_best = True
+            if accelerator.num_processes > 1:
+                from accelerate.utils import broadcast_object_list
+
+                payload = [is_best, best_loss]
+                broadcast_object_list(payload, from_process=0)
+                is_best, best_loss = payload
 
         if is_log_step:
             logging.info(train_tracker)
