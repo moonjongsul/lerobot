@@ -1,4 +1,5 @@
 HDD_PATH='/data/keti/mjs/lerobot'
+JOB_NAME='smolvla_kit_rot6d_a6000_b24x2_260507'
 
 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True CUDA_VISIBLE_DEVICES=2,3 accelerate launch \
   --num_processes=2 \
@@ -25,5 +26,5 @@ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True CUDA_VISIBLE_DEVICES=2,3 accele
   --best_loss_warmup_step=20000 \
   --wandb.enable=true \
   --batch_size=24 \
-  --output_dir=${HDD_PATH}/outputs/smolvla_kit_rot6d_a6000_b24x2_260506 \
-  --job_name=smolvla_kit_rot6d_a6000_b24x2_260506
+  --output_dir=${HDD_PATH}/outputs/${JOB_NAME} \
+  --job_name=${JOB_NAME}

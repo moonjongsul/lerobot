@@ -4,15 +4,15 @@ from huggingface_hub import HfApi, create_repo
 
 
 HF_USER = 'moonjongsul'
-PROJECT = 'manufacturing_kitting_smolvla_rot6d_260504'
+PROJECT = 'kcare_open_drawer_260601'
 REPO_ID = f'{HF_USER}/{PROJECT}'
 
-LOCAL_PATH = "/data/keti/mjs/lerobot/outputs/smolvla_kitting_rot6d_a6000_b24x3_260504/checkpoints"
+LOCAL_PATH = f"/data/keti/mjs/lerobot/outputs/smolvla_drawer_open_joint_a6000_b24x4_260601/checkpoints"
 CKPTS = [
-    "best_step_081500_loss_0.003167",
-    "best_step_079200_loss_0.003667",
-    "best_step_065400_loss_0.004289",
-    "best_step_056200_loss_0.005239",
+    "best_step_163900_loss_0.029579",
+    "best_step_152400_loss_0.030344",
+    "best_step_128500_loss_0.035484",
+    "best_step_157800_loss_0.030116",
 ]
 CKPTS = [f"{LOCAL_PATH}/{str(ckpt)}" for ckpt in CKPTS]
 
