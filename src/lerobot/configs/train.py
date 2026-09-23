@@ -58,6 +58,14 @@ class TrainPipelineConfig(HubMixin):
     batch_size: int = 8
     steps: int = 100_000
     eval_freq: int = 20_000
+    # Episodes held out of training, evaluated offline every `eval_freq` steps.
+    # Only MVLA uses this: the metrics are its auxiliary heads' (subtask, value,
+    # status), which no other policy has. Unset means no held-out evaluation,
+    # which is how every existing run behaves.
+    #
+    # Separate from `eval_freq`'s simulator path above: that one needs `cfg.env`
+    # and rolls the policy out, which a real-robot dataset has no way to do.
+    val_episodes: list[int] | None = None
     log_freq: int = 200
     tolerance_s: float = 1e-4
     save_checkpoint: bool = True

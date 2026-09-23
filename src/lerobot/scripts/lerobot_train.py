@@ -228,6 +228,28 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
     if not is_main_process:
         dataset = make_dataset(cfg)
 
+    # Held-out dataset for offline evaluation of MVLA's auxiliary heads. Built
+    # by re-reading the same repo with a different episode list, so it goes
+    # through `make_dataset` and therefore gets the same transforms, the same
+    # rename map and -- for MVLA -- the same target-deriving wrapper as the
+    # training set. Constructing it by hand would let those drift apart.
+    val_dataset = None
+    if cfg.val_episodes and cfg.eval_freq > 0:
+        import copy
+
+        val_cfg = copy.deepcopy(cfg)
+        val_cfg.dataset.episodes = list(cfg.val_episodes)
+        # No image augmentation on the validation pass: it exists to make the
+        # training set harder, and applying it here would report a number that
+        # is neither train nor test.
+        val_cfg.dataset.image_transforms.enable = False
+        val_dataset = make_dataset(val_cfg)
+        if is_main_process:
+            logging.info(
+                f"Held-out set: {val_dataset.num_episodes} episodes, "
+                f"{val_dataset.num_frames} frames"
+            )
+
     # Create environment used for evaluating checkpoints during training on simulation data.
     # On real-world data, no need to create an environment as evaluations are done outside train.py,
     # using the eval.py instead, with gym_dora environment and dora-rs.
@@ -518,6 +540,26 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
                     wandb_logger.log_policy(best_checkpoint_dir)
                     
             accelerator.wait_for_everyone()
+
+        if val_dataset is not None and is_eval_step and is_main_process:
+            from lerobot.policies.mvla.eval_heads import evaluate as evaluate_heads
+
+            unwrapped = accelerator.unwrap_model(policy)
+            if hasattr(unwrapped, "head_outputs"):
+                logging.info(f"Evaluating held-out heads at step {step}")
+                with accelerator.autocast():
+                    metrics = evaluate_heads(
+                        unwrapped,
+                        val_dataset,
+                        preprocessor,
+                        root=val_dataset.root,
+                        batch_size=cfg.batch_size,
+                        num_workers=cfg.num_workers,
+                        device=device,
+                    )
+                logging.info(metrics.summary())
+                if wandb_logger:
+                    wandb_logger.log_dict(metrics.to_wandb(), step)
 
         if cfg.env and is_eval_step:
             if is_main_process:
