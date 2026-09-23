@@ -33,9 +33,26 @@ from lerobot.utils.constants import (
 from .configuration_mvla import MVLAConfig
 from .heads import MVLAHeads
 
-# Batch keys the auxiliary heads read their targets from. Produced by
-# data/derive.py and attached by the dataset pipeline.
-TARGET_KEYS = ("subtask_index", "value_subtask", "value_episode", "status")
+# Batch keys the auxiliary heads read their targets from, and the key the
+# elapsed-time channel arrives under. Produced by data/derive.py and
+# attached by the dataset wrapper.
+#
+# The `observation.` prefix is load-bearing, not cosmetic. The preprocessor
+# turns each batch into an `EnvTransition` via `batch_to_transition`, which
+# keeps only keys under that prefix plus a fixed allowlist (task, index,
+# episode_index, *_is_pad). Plain names like "subtask_index" are dropped
+# there, silently: the heads would then find no targets, contribute no
+# loss, and train on nothing while the run looks healthy.
+TARGET_KEYS = (
+    "observation.subtask_index",
+    "observation.value_subtask",
+    "observation.value_episode",
+    "observation.status",
+)
+ELAPSED_KEY = "observation.elapsed_subtask"
+
+# Head-loss target names, in the order `TARGET_KEYS` lists them.
+TARGET_NAMES = ("subtask_index", "value_subtask", "value_episode", "status")
 
 
 class MVLAPolicy(SmolVLAPolicy):
@@ -75,7 +92,7 @@ class MVLAPolicy(SmolVLAPolicy):
             )
 
         state = super().prepare_state(batch)
-        elapsed = batch.get("elapsed_subtask")
+        elapsed = batch.get(ELAPSED_KEY)
         if not self.config.use_elapsed_subtask or elapsed is None:
             return state
         elapsed = elapsed.to(state.dtype).reshape(state.shape[0], 1)
@@ -165,7 +182,11 @@ class MVLAPolicy(SmolVLAPolicy):
             return loss, loss_dict
 
         outputs = self.head_outputs(batch)
-        targets = {k: batch[k] for k in TARGET_KEYS if k in batch}
+        targets = {
+            name: batch[key]
+            for key, name in zip(TARGET_KEYS, TARGET_NAMES, strict=True)
+            if key in batch
+        }
         aux = self.heads.losses(outputs, targets)
         for name, value in aux.items():
             loss_dict[f"loss_{name}"] = value.item()

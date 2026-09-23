@@ -15,6 +15,7 @@
 from .act.configuration_act import ACTConfig as ACTConfig
 from .diffusion.configuration_diffusion import DiffusionConfig as DiffusionConfig
 from .groot.configuration_groot import GrootConfig as GrootConfig
+from .mvla.configuration_mvla import MVLAConfig as MVLAConfig
 from .pi0.configuration_pi0 import PI0Config as PI0Config
 from .pi0_fast.configuration_pi0_fast import PI0FastConfig as PI0FastConfig
 from .pi05.configuration_pi05 import PI05Config as PI05Config
@@ -32,6 +33,7 @@ __all__ = [
     "PI05Config",
     "PI0FastConfig",
     "SmolVLAConfig",
+    "MVLAConfig",
     "SARMConfig",
     "TDMPCConfig",
     "VQBeTConfig",

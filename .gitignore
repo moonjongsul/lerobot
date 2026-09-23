@@ -167,6 +167,10 @@ wandb/
 
 # Data folders
 data/
+# ...but not MVLA's data layer, which is source, not a data folder. The
+# blanket rule above matches at any depth, so without this exception the
+# whole package disappears from a fresh clone.
+!src/lerobot/policies/mvla/data/
 outputs/
 
 # Translations

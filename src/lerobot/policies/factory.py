@@ -475,6 +475,18 @@ def make_policy(
             raise ValueError("env_cfg cannot be None when ds_meta is not provided")
         features = env_to_policy_features(env_cfg)
 
+    if rename_map:
+        # The same renaming the preprocessor applies to each batch, applied
+        # here to the feature names derived from the dataset. Without it a
+        # policy built from `--policy.type` (whose `input_features` start
+        # empty and are filled in below) would declare the dataset's own
+        # camera names while the batches arriving at training time carry the
+        # renamed ones, and every image would be reported missing. A policy
+        # built from `--policy.path` is unaffected either way: its
+        # `input_features` come from the pretrained config already named the
+        # way the batches will be.
+        features = {rename_map.get(key, key): ft for key, ft in features.items()}
+
     cfg.output_features = {key: ft for key, ft in features.items() if ft.type is FeatureType.ACTION}
     if not cfg.input_features:
         cfg.input_features = {key: ft for key, ft in features.items() if key not in cfg.output_features}
