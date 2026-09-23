@@ -50,21 +50,42 @@ python -m lerobot.policies.mvla.recognizer.train \
 ## 2. 정책 학습
 
 ```bash
-python -m lerobot.scripts.train \
-  --policy.type=mvla \
-  --dataset.repo_id=moonjongsul/xarm7-kitting-260923
+cd /workspace/m.ax/thirdparty/lerobot
+STAGE=4 ./train_xarm7_mvla.sh
 ```
 
-단계별로 플래그를 켭니다:
+단계는 누적이며, **각 추가분의 효과를 귀속시키기 위해** 존재합니다.
+1단계는 SmolVLA를 재현해야 하고, 이후 단계는 한 번에 하나씩만 바꿉니다.
 
-| 단계 | 플래그 |
+| STAGE | 내용 |
 |---|---|
-| 1 베이스라인 | `use_subtask_head=False use_value_heads=False use_status_head=False neutral_prompt_prob=0` |
-| 2 subtask | `use_subtask_head=True` |
-| 3 metadata | `use_metadata_prompt=True neutral_prompt_prob=0.5` |
-| 4 value | `use_value_heads=True use_status_head=True use_elapsed_subtask=True` |
-| 5 subgoal | `use_subgoal_images=True` |
-| 7 advantage | `use_advantage_prompt=True` (value 학습 후) |
+| 1 | 베이스라인 — 헤드 전부 off, 프롬프트 원문. **SmolVLA와 일치해야 함** |
+| 2 | + subtask 프롬프트·헤드 |
+| 3 | + quality/speed/mistake metadata, 중립 프롬프트 |
+| 4 | + value·status 헤드, 경과시간 (기본값) |
+| 5 | + subgoal 이미지 |
+| 7 | + advantage 조건화 (value 학습 후) |
+
+가중치는 `--policy.type=mvla --policy.pretrained_path=lerobot/smolvla_base`로
+로드합니다 — 정책 클래스는 `type`이 정하므로 SmolVLA 가중치를 받고
+새 헤드만 초기화됩니다.
+
+### 데이터 어댑터
+
+`data/adapter.py`가 `LeRobotDataset`을 감싸 배치에 다음을 실어줍니다:
+
+| 키 | 출처 |
+|---|---|
+| `task` | 조립된 프롬프트 (중립/원문 선택 + dropout) |
+| `subtask_index`, `value_subtask`, `value_episode`, `status` | `data/derive.py` |
+| `elapsed_subtask` | 별도 키. 정규화 **이후** 정책이 state에 붙입니다 |
+
+`datasets/factory.py`가 `policy.type == "mvla"`일 때만 래핑하며,
+**헤드가 전부 꺼져 있으면 원본 데이터셋을 그대로 반환**합니다 —
+1단계 베이스라인이 진짜 베이스라인이 되도록.
+
+⚠️ `elapsed_subtask`를 데이터셋에서 `observation.state`에 직접 붙이면 안 됩니다.
+정규화 통계가 8채널 기준이라 9번째 채널에서 broadcast가 깨집니다.
 
 ---
 

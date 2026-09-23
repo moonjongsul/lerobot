@@ -128,4 +128,16 @@ def make_dataset(cfg: TrainPipelineConfig) -> LeRobotDataset | MultiLeRobotDatas
             for stats_type, stats in IMAGENET_STATS.items():
                 dataset.meta.stats[key][stats_type] = torch.tensor(stats, dtype=torch.float32)
 
+    # MVLA's auxiliary heads need per-frame targets derived from the subtask
+    # runs, and its prompt is assembled rather than taken verbatim. The
+    # wrapper is a no-op when every head is disabled, so the stage-1
+    # SmolVLA baseline is unaffected.
+    if getattr(cfg.policy, "type", None) == "mvla":
+        from lerobot.policies.mvla.data.adapter import describe, wrap_dataset
+
+        wrapped = wrap_dataset(dataset, cfg.policy, root=str(dataset.root))
+        if wrapped is not dataset:
+            logging.info(describe(wrapped))
+        dataset = wrapped
+
     return dataset

@@ -96,9 +96,14 @@ class MVLAConfig(SmolVLAConfig):
     # what turns 6 episode-level failures into 94.
     use_status_head: bool = True
     status_loss_weight: float = 0.05
-    # 94 failures against 1274 successes; without weighting the head learns
-    # to answer "running" always.
-    status_class_weights: tuple[float, float, float] = (1.0, 5.0, 15.0)
+    # Only the last frame of a run is terminal, so on this dataset the split
+    # is 283194 running / 1274 success / 94 failure -- 99.52% / 0.45% /
+    # 0.03%. Answering "running" unconditionally is already 99.5% accurate,
+    # so the weights have to make that answer expensive. Inverse-frequency
+    # would be (0.3, 74.5, 1009); that is used directly rather than softened,
+    # because at (1, 5, 15) the always-running solution costs only 0.27 in
+    # weighted loss and the head simply collapses to it.
+    status_class_weights: tuple[float, float, float] = (0.3, 75.0, 1000.0)
 
     # Retrospective per-run failure flag, used as a conditioning input only.
     # Not as a detection target: the label covers the whole run including

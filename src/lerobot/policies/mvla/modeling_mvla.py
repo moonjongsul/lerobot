@@ -52,6 +52,42 @@ class MVLAPolicy(SmolVLAPolicy):
         # estimate without a second forward pass.
         self._last_read: dict[str, Tensor] = {}
 
+    def prepare_state(self, batch: dict[str, Tensor]) -> Tensor:
+        """SmolVLA's state, with elapsed-time-in-subtask appended.
+
+        Appended here rather than in the dataset because normalisation runs
+        between the two: its statistics describe the dataset's own state
+        channels, so an extra one added upstream would not line up. This
+        channel is already scaled to roughly [0, 1] by the adapter and wants
+        no further normalising.
+
+        The result is zero-padded to `max_state_dim` downstream, so adding a
+        channel changes no shape the rest of the model sees.
+        """
+        raw = batch.get(OBS_STATE)
+        expected = self.config.robot_state_feature.shape[0]
+        if raw is not None and raw.shape[-1] != expected:
+            raise ValueError(
+                f"observation.state has {raw.shape[-1]} channels but the policy "
+                f"declares {expected}. The elapsed-subtask channel belongs in its "
+                "own batch key, not appended upstream: normalisation statistics "
+                "only cover the recorded channels."
+            )
+
+        state = super().prepare_state(batch)
+        elapsed = batch.get("elapsed_subtask")
+        if not self.config.use_elapsed_subtask or elapsed is None:
+            return state
+        elapsed = elapsed.to(state.dtype).reshape(state.shape[0], 1)
+        # `super()` already padded to max_state_dim; write the channel into
+        # the first padding slot so the real state keeps its layout.
+        width = self.config.robot_state_feature.shape[0]
+        if width < state.shape[-1]:
+            state = state.clone()
+            state[:, width : width + 1] = elapsed
+            return state
+        return torch.cat([state, elapsed], dim=-1)
+
     def _prefix_feature_dim(self) -> int:
         """Width of the pooled prefix the heads read.
 
