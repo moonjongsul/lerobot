@@ -393,7 +393,7 @@ prefix (VLM)
   "Task: {중립}. Subtask: {sub}. Speed: {bin}. Quality: {1-5}.
    Mistake: {t|f}. Advantage: {pos|neg}."
   [state: vx..wz, gripper, gripper_effort, elapsed_subtask]
-         ↓ pooled (320D)
+         ↓ pooled (960D — 4.7 참고, 320D에서 개정)
 헤드    subtask(7) / V_subtask(201) / V_episode(201) / status(3)
 suffix  action expert → flow matching (기존, 무수정)
 ```
@@ -513,16 +513,66 @@ pi0.7은 MEM history encoder로 6프레임을 넣지만 SmolVLA에는 없다.
 
 ### 4.7 prefix pooled read 구현 노트
 
-SmolVLA 스택은 suffix가 `None`인 경로를 `fill_kv_cache=True`와 함께만 허용한다.
-그래서 SmolVLA가 prefix 캐시를 채울 때 쓰는 호출을 그대로 따르고, 반환된
-KV 캐시의 마지막 레이어 `value_states`를 풀링한다.
+⚠️ **2026-09-23 개정: 차원이 320 → 960으로 바뀌었다.** 아래는 개정 후 기준이고,
+이유는 학습 시 OOM이다.
 
-차원: `num_key_value_heads(5) × head_dim(64) = 320`.
-text model hidden size(960)가 아니다 — grouped-query attention이라 KV 헤드가 적다.
-config에서 유도하므로 하드코딩 아님.
+#### 왜 바뀌었나
+
+초기 구현은 prefix를 **두 번** 계산했다. `super().forward()`가 flow matching을
+위해 VLM을 한 번 돌리고, 헤드를 위해 `encode_prefix()`가 또 한 번 돌리는 구조다.
+두 activation이 backward까지 살아 있어야 하므로 메모리가 거의 두 배가 되고,
+**배치 90 / H200에서 stage 4가 step 0에 OOM으로 죽는다**(137GB/139GB 사용).
+stage 1은 헤드가 꺼져 있어 두 번째 경로를 안 타므로 문제가 드러나지 않았다.
+
+해결은 **SmolVLA가 이미 계산하고 버리는 prefix 출력을 받아 쓰는 것**이다.
+`VLAFlowMatching.forward`는 결과를 `(_, suffix_out)`로 해체하며 prefix hidden
+states를 그냥 버린다. 후킹으로 그것을 가져오면 추가 연산도 추가 메모리도 없다.
+
+#### 왜 `value_states`가 아니라 hidden states인가
+
+원래 방식(KV 캐시의 `value_states`)은 **학습 경로에서 불가능하다.** 그 텐서는
+`use_cache=True`일 때만 캐시에 저장되는데 학습 forward는 `use_cache=False`로
+돌기 때문에 애초에 남지 않는다. 플래그를 바꿔 보는 시도는 두 번 다 막혔다:
+
+| 시도 | 결과 |
+|---|---|
+| `fill_kv_cache=True` 강제 | 모든 레이어가 self-attn 경로로 가서 expert에 VLM 폭이 들어감 (`4500x720 and 320x320`) |
+| `use_cache=True, fill_kv_cache=False` | 채운 적 없는 캐시를 읽으려 함 (`KeyError: 0`) |
+
+두 플래그는 독립 스위치가 아니라 `VLMWithExpert.forward`의 **레이어 라우팅
+조건**이다(`fill_kv_cache`가 조건의 첫 항). 그래서 플래그를 건드리지 않고
+출력만 받는 방식으로 갔다.
+
+#### 차원
+
+`text_config.hidden_size = 960`. 이전의 320은
+`num_key_value_heads(5) × head_dim(64)`였다 — grouped-query attention이라
+query head 15개가 KV head 5개를 3:1로 공유해서 정확히 1/3이었다.
+**카메라 3대와 3배가 우연히 일치하지만 무관하다.** 세 카메라는 원래부터
+prefix 시퀀스에 나란히 들어가 있고, 바뀐 것은 "시퀀스를 어떻게 자르느냐"가
+아니라 "각 위치를 무엇으로 표현하느냐"다.
+
+hidden states 쪽이 정보량이 많고(attention + MLP + residual + layernorm을 모두
+거친 최종 표현, value states는 그 중간 재료), 헤드 파라미터는 13만 → 39만으로
+늘지만 403M 중 0.06%라 무시할 수준이다.
+
+#### 학습과 추론이 같은 것을 본다
+
+`encode_prefix()`(추론)도 hidden states를 쓰도록 통일했다. 추론 경로는
+`read_state()`가 `select_action` 없이 30Hz로 단독 호출되므로 공유할 forward가
+없어 재계산이 맞고, 그대로 두었다. **두 경로가 다른 특징을 보면 rollout에서
+헤드가 무의미해지므로** 폭과 텐서 종류를 일치시키는 것이 핵심이다.
+
+`_prefix_feature_dim()`이 config에서 유도하므로 하드코딩은 아니다.
+
+#### 풀링
 
 패딩 위치를 제외하고 풀링한다. prefix가 고정 길이로 우측 패딩되므로, 단순 평균은
 짧은 프롬프트를 더 희석시켜 헤드가 프롬프트 길이에 민감해진다.
+
+학습 경로에서는 캐시가 prefix와 suffix 위치를 모두 포함하므로, prefix 자신의
+padding mask 길이로 잘라낸 뒤 풀링한다. suffix까지 평균내면 action expert의
+상태가 "관측을 설명해야 할 특징"에 섞인다.
 
 **헤드는 KI(Knowledge Insulation)의 역할도 한다.** pi0.6/0.7은 백본에 FAST 토큰
 CE loss를 주고 action expert 그래디언트를 stop-gradient로 차단한다. SmolVLA에는
@@ -836,9 +886,15 @@ rollout 데이터.
 6. **`elapsed_subtask`를 state에 직접 붙이면 정규화가 깨진다.**
    통계가 8채널 기준이므로 9번째에서 broadcast 실패. 정규화 이후에 붙여야 한다.
 
-7. **SmolVLA prefix-only 경로는 `fill_kv_cache=True`와만 동작한다.**
-   KV 캐시의 `value_states`를 풀링하는 방식으로 해결. 차원은 960이 아니라 320
-   (grouped-query attention).
+7. **SmolVLA prefix-only 경로(추론)는 `fill_kv_cache=True`와만 동작한다.**
+   반대로 **학습 경로에서는 그 플래그를 건드리면 안 된다** — `use_cache`/
+   `fill_kv_cache`는 독립 스위치가 아니라 레이어 라우팅 조건이라, 강제하면
+   expert에 VLM 폭이 들어가거나(`4500x720`) 빈 캐시를 읽는다(`KeyError: 0`).
+   학습은 SmolVLA가 버리는 prefix hidden states를 후킹으로 받는다. §4.7 참고.
+
+7b. **헤드를 위해 prefix를 다시 계산하면 배치 90에서 OOM이다.**
+   activation이 두 벌 살아남아야 해서 메모리가 거의 두 배. stage 1은 헤드가
+   꺼져 있어 안 드러나고 stage 4에서 step 0에 죽는다.
 
 8. **`itertuples()`는 슬래시가 든 컬럼명을 속성으로 노출하지 못한다.**
    `videos/observation.images.wrist_front/file_index` 등은 인덱싱으로 접근.
