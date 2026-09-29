@@ -226,3 +226,62 @@ def evaluate_task(
         operating_points=table,
         per_class=per_class,
     )
+
+
+def _holdout_proba(train_x, train_y, test_x, classes, probe_c):
+    probe = _make_probe(probe_c).fit(train_x, train_y)
+    raw = probe.predict_proba(test_x)
+    proba = np.zeros((len(test_x), len(classes)))
+    for j, name in enumerate(probe.classes_):
+        proba[:, classes.index(name)] = raw[:, j]
+    return proba
+
+
+def holdout_evaluate(
+    task: str,
+    train_features: np.ndarray,
+    train_labels: np.ndarray,
+    test_features: np.ndarray,
+    test_labels: np.ndarray,
+    test_units: np.ndarray,
+    positive: str,
+    placebo_train: np.ndarray | None = None,
+    placebo_test: np.ndarray | None = None,
+    probe_c: float = 0.1,
+) -> TaskResult:
+    """Fit on the training episodes, score on held-out ones, by run.
+
+    The held-out episodes are the tail of each task block (`split_*.json`),
+    i.e. later in recording order than anything the probe saw -- the same
+    unseen-session condition block CV approximates, but on episodes no
+    choice during development could have been tuned on.
+    """
+    classes = sorted(set(train_labels.tolist()) | set(test_labels.tolist()))
+    proba = _holdout_proba(train_features, train_labels, test_features, classes, probe_c)
+    truth, probs = aggregate_by_unit(test_units, test_labels, proba, classes)
+    predicted = np.array(classes)[probs.argmax(axis=1)]
+    per_class = {
+        name: float((predicted[truth == name] == name).mean()) for name in classes if (truth == name).any()
+    }
+    binary = (truth == positive).astype(int)
+    score = probs[:, classes.index(positive)]
+    if len(set(binary.tolist())) > 1:
+        auc, ap, table = roc_auc_score(binary, score), average_precision_score(binary, score), operating_table(binary, score)
+    else:
+        auc, ap, table = float("nan"), float("nan"), None
+
+    placebo_accuracy = placebo_auc = None
+    if placebo_train is not None and placebo_test is not None:
+        p = _holdout_proba(placebo_train, train_labels, placebo_test, classes, probe_c)
+        p_truth, p_probs = aggregate_by_unit(test_units, test_labels, p, classes)
+        placebo_accuracy = accuracy_score(p_truth, np.array(classes)[p_probs.argmax(axis=1)])
+        p_binary = (p_truth == positive).astype(int)
+        if len(set(p_binary.tolist())) > 1:
+            placebo_auc = roc_auc_score(p_binary, p_probs[:, classes.index(positive)])
+
+    return TaskResult(
+        task=task, n_units=len(truth), n_positive=int(binary.sum()),
+        accuracy=accuracy_score(truth, predicted), auc=auc, average_precision=ap,
+        placebo_accuracy=placebo_accuracy, placebo_auc=placebo_auc,
+        operating_points=table, per_class=per_class,
+    )

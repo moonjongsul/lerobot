@@ -158,6 +158,28 @@ class TaskManager:
             return state
         return self._advance() if passed else self._fail(subtask, "verification failed")
 
+    def verification_failed(self, subtask: str, verdict: dict, reason: str = "verification failed") -> ManagerState:
+        """이미 넘어간 subtask를 사후 검증이 뒤집을 때.
+
+        flip은 결과 판정에 ~1초가 걸리는데 그동안 정책을 flip 프롬프트에 붙잡아
+        두면 다시 뒤집으려 할 수 있다. 그래서 런타임은 먼저 넘어가고, 판정이
+        실패로 나오면 여기로 알린다. 판정의 히스테리시스는 `subtask_finished`와
+        같다 -- 같은 판정이 `hysteresis`번 연속이어야 행동한다.
+        """
+        state = self._require()
+        if state.outcome is not Outcome.RUNNING:
+            return state
+        if verdict.get("label") == "abstain":
+            state.outcome = Outcome.NEEDS_OPERATOR
+            state.reason = f"recognizer abstained after {subtask} (ood={verdict.get('ood', float('nan')):.1f})"
+            return state
+        if self._passes(subtask, verdict):
+            state._pending = ("", 0)
+            return state
+        if not self._debounce(f"{subtask}:False"):
+            return state
+        return self._fail(subtask, reason)
+
     # ───────────────────────────────────────────────────────── internals
     def _passes(self, subtask: str, verdict: dict) -> bool:
         probs = verdict.get("probs", {})

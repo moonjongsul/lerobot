@@ -186,19 +186,38 @@ class StateRecognizer:
             self._encoder = FrozenEncoder(self.cfg)
         return self._encoder
 
-    def encode_views(self, views: dict[str, np.ndarray]) -> np.ndarray:
-        """Concatenate per-camera features in a fixed camera order."""
-        ordered = [views[c] for c in self.cfg.cameras]
-        feats = self.encoder(ordered)
-        return feats.reshape(1, -1)
+    def encode_views(self, task: str, views: dict[str, np.ndarray]) -> tuple[np.ndarray, bool]:
+        """BGR 전체 프레임 -> 학습 때와 같은 크롭 -> 카메라 순서대로 이어 붙인 특징.
+
+        크롭은 전처리가 아니라 실험 조건이다(crops.py 참고). 학습(`train.embed`)이
+        과제별 크롭을 RGB로 넣었으므로 여기서도 똑같이 한다. 크롭 없이 전체
+        프레임을 넣으면 인코더가 부품이 아니라 작업대를 읽는다.
+
+        반환: (1, D*카메라) 특징, 모든 카메라에서 부품이 검출됐는지.
+        """
+        import cv2
+
+        from . import crops as crop_module
+
+        cropper = crop_module.CROPPERS[task]
+        images, found_all = [], True
+        for cam in self.cfg.cameras:
+            cropped, found = cropper(views[cam], self.cfg.image_size)
+            found_all &= bool(found)
+            images.append(cv2.cvtColor(cropped, cv2.COLOR_BGR2RGB))
+        # 학습은 카메라별로 따로 인코딩해 이어 붙였다: [cam0 전체 | cam1 전체]
+        feats = self.encoder(images)
+        return feats.reshape(1, -1), found_all
 
     def __call__(self, task: str, views: dict[str, np.ndarray]) -> dict:
-        features = self.encode_views(views)
+        """`views`: 카메라 이름 -> 640x480 BGR 전체 프레임 (녹화와 같은 형식)."""
+        features, found = self.encode_views(task, views)
         names, probs, ood = self.probes[task].predict(features)
         return {
             "label": names[0],
             "probs": dict(zip(self.probes[task].classes, probs[0], strict=True)),
             "ood": float(ood[0]),
+            "detected": found,
         }
 
     @classmethod

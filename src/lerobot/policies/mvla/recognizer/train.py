@@ -8,6 +8,12 @@ Runs end to end: sample the frames the episode structure implies, decode
 them, embed them with a frozen backbone, cross-validate under the protocol
 in `evaluate.py`, then fit the final probes on everything and save.
 
+With `--split split_260923.json` the probes are cross-validated and fitted on
+the `train` episodes only, and then scored once on the `val` episodes -- the
+same held-out set the policy is evaluated on, so the two can be combined
+(e.g. gating the policy's `place` completion on the tray verdict) without
+either having seen those episodes.
+
 Validation is not optional here and not a separate command. A recognizer
 that scores well because it memorised the room looks identical to a working
 one until it reaches a different room, so the placebo margin is printed
@@ -26,7 +32,7 @@ import numpy as np
 from ..data.segments import subtask_names
 from . import crops as crop_module
 from .dataset import CAMERAS, build_samples, extract_frames, frame_path
-from .evaluate import evaluate_task, random_cv_predict, aggregate_by_unit
+from .evaluate import aggregate_by_unit, evaluate_task, holdout_evaluate, random_cv_predict
 from .model import FrozenEncoder, LinearProbe, RecognizerConfig, StateRecognizer
 
 # Which crop each task is validated with, and its no-object control.
@@ -77,6 +83,10 @@ def main() -> None:
     parser.add_argument("--blocks", type=int, default=5)
     parser.add_argument("--device", default="cuda")
     parser.add_argument(
+        "--split", type=Path, default=None,
+        help="split json with train/val episode lists: fit on train, report held-out val",
+    )
+    parser.add_argument(
         "--skip-placebo", action="store_true", help="skip the control (not recommended)"
     )
     args = parser.parse_args()
@@ -94,6 +104,14 @@ def main() -> None:
     samples = build_samples(args.dataset)
     decoded = extract_frames(args.dataset, samples, cache_dir)
     print(f"samples   {len(samples)}  ({decoded} frames decoded, rest cached)")
+    val_episodes: set[int] = set()
+    if args.split is not None:
+        split = json.loads(args.split.read_text())
+        val_episodes = set(split["val"])
+        overlap = val_episodes & set(split["train"])
+        if overlap:
+            raise ValueError(f"split has episodes in both train and val: {sorted(overlap)[:10]}")
+        print(f"split     {args.split}: train {len(split['train'])} / val {len(val_episodes)} episodes")
 
     encoder = FrozenEncoder(cfg)
     results, probes, report = {}, {}, {}
@@ -107,10 +125,20 @@ def main() -> None:
         for name, count in sorted(zip(*np.unique(labels, return_counts=True), strict=True)):
             print(f"    {name:14s} {count}")
 
-        features = embed(subset, cache_dir, real_crop, encoder)
-        placebo = (
+        all_features = embed(subset, cache_dir, real_crop, encoder)
+        all_placebo = (
             None if args.skip_placebo else embed(subset, cache_dir, placebo_crop, encoder)
         )
+        # Everything below -- CV, the final fit -- sees the training episodes
+        # only. The held-out episodes are scored once, at the end.
+        is_val = np.array([s.episode in val_episodes for s in subset])
+        tr = ~is_val
+        val_labels, val_units = labels[is_val], units[is_val]
+        labels, units, groups = labels[tr], units[tr], groups[tr]
+        features = all_features[tr]
+        placebo = None if all_placebo is None else all_placebo[tr]
+        if is_val.any():
+            print(f"    train {int(tr.sum())} frames / held-out {int(is_val.sum())} frames")
 
         result = evaluate_task(
             task=task,
@@ -161,6 +189,35 @@ def main() -> None:
             print(result.operating_points.to_string(index=False, float_format=lambda v: f"{v:.2f}"))
 
         probes[task] = LinearProbe(cfg, cfg.tasks[task]).fit(features, labels)
+
+        heldout = None
+        if is_val.any():
+            heldout = holdout_evaluate(
+                task=f"{task} [held-out val]",
+                train_features=features, train_labels=labels,
+                test_features=all_features[is_val], test_labels=val_labels, test_units=val_units,
+                positive=TASK_POSITIVE[task],
+                placebo_train=placebo,
+                placebo_test=None if all_placebo is None else all_placebo[is_val],
+                probe_c=cfg.probe_c,
+            )
+            print(heldout.summary())
+            if task == "tray" and heldout.operating_points is not None:
+                print("  held-out operating points:")
+                print(heldout.operating_points.to_string(index=False, float_format=lambda v: f"{v:.2f}"))
+            if task == "mat" and all_placebo is not None:
+                keep_tr, keep_va = labels != "empty", val_labels != "empty"
+                if keep_va.any() and len(set(val_labels[keep_va].tolist())) > 1:
+                    om = holdout_evaluate(
+                        task="mat(on-mat only) [held-out val]",
+                        train_features=features[keep_tr], train_labels=labels[keep_tr],
+                        test_features=all_features[is_val][keep_va], test_labels=val_labels[keep_va],
+                        test_units=val_units[keep_va], positive=TASK_POSITIVE[task],
+                        placebo_train=placebo[keep_tr], placebo_test=all_placebo[is_val][keep_va],
+                        probe_c=cfg.probe_c,
+                    )
+                    print("  " + om.summary().replace("\n", "\n  "))
+                    heldout_on_mat = om
         report[task] = {
             "units": result.n_units,
             "positive": result.n_positive,
@@ -172,6 +229,22 @@ def main() -> None:
             "shuffled_fold_accuracy": optimistic,
             "per_class": result.per_class,
         }
+        if heldout is not None:
+            report[task]["heldout"] = {
+                "units": heldout.n_units, "positive": heldout.n_positive,
+                "accuracy": heldout.accuracy, "auc": heldout.auc,
+                "average_precision": heldout.average_precision,
+                "placebo_auc": heldout.placebo_auc, "placebo_margin": heldout.placebo_margin,
+                "per_class": heldout.per_class,
+                "operating_points": None if heldout.operating_points is None
+                else heldout.operating_points.to_dict(orient="records"),
+            }
+            if task == "mat" and "heldout_on_mat" in locals():
+                report[task]["heldout"]["on_mat_only"] = {
+                    "accuracy": heldout_on_mat.accuracy, "auc": heldout_on_mat.auc,
+                    "placebo_auc": heldout_on_mat.placebo_auc,
+                    "placebo_margin": heldout_on_mat.placebo_margin,
+                }
         if on_mat is not None:
             report[task]["on_mat_only"] = {
                 "accuracy": on_mat.accuracy,
@@ -180,6 +253,8 @@ def main() -> None:
                 "placebo_margin": on_mat.placebo_margin,
             }
 
+    if args.split is not None:
+        report["split"] = {"file": str(args.split), "val_episodes": sorted(val_episodes)}
     StateRecognizer(cfg, probes).save(args.out)
     (args.out / "report.json").write_text(json.dumps(report, indent=2, default=float))
     print(f"\nsaved to {args.out}")

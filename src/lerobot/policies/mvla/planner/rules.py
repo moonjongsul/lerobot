@@ -113,16 +113,34 @@ def plan(goal: str, state: str) -> Plan:
     return Plan(goal=goal, state=state, task_prompt=NEUTRAL_PROMPTS[goal], subtasks=subtasks)
 
 
+# A failure at the tray is retried at the tray: the part is re-picked where it
+# landed and placed again, with no `move` in between. Read off the dataset --
+# after a failed place the operators went `approach_pick -> pick -> place` in
+# every recovered case (31 direct, plus the nested retries), and a failed move
+# recovered the same way. Planning a `move` there leaves the runtime waiting
+# for a subtask the demonstrations never perform.
+_TRAY_RETRY: list[str] = [APPROACH_PICK, PICK, PLACE]
+
+
 def replan_after_failure(current: Plan, failed_subtask: str) -> Plan:
     """Plan to resume with after `failed_subtask` did not achieve its goal.
 
     The remaining sequence is rebuilt from the recovery entry point rather
     than continued, so a failed place goes back through picking the part up
     again -- the recovery the demonstrations actually contain.
+
+    Failures at the tray (place, move, or a pick that was itself a tray retry,
+    i.e. its plan had no `move` left) resume with `_TRAY_RETRY`.
     """
     entry = _RECOVERY.get(failed_subtask)
     if entry is None:
         raise UnplannableState(f"no recovery defined for {failed_subtask!r}")
+    at_tray = failed_subtask in (PLACE, MOVE) or (
+        failed_subtask == PICK and PLACE in current.subtasks and MOVE not in current.subtasks
+    )
+    if at_tray and current.goal in (GOAL_KIT, GOAL_PLACE):
+        return Plan(goal=current.goal, state=current.state, task_prompt=current.task_prompt,
+                    subtasks=list(_TRAY_RETRY))
     full = _PLANS[(current.goal, MAT_TARGET if entry == APPROACH_FLIP else MAT_FLIPPED)]
     resume = full[full.index(entry) :]
     return Plan(

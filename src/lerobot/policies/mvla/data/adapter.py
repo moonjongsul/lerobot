@@ -32,13 +32,28 @@ from .segments import dataset_root, subtask_sentences
 # too many.
 SUBTASK_KEY, VALUE_SUBTASK_KEY, VALUE_EPISODE_KEY, STATUS_KEY = TARGET_KEYS
 
+# How the prompt is built. Only "train" belongs in training; the others exist
+# because a held-out pass with training prompts measures the wrong thing.
+# The training prompt carries the ground-truth subtask (80% of samples) and
+# the run's retrospective `Mistake:` flag, and the heads read the prompt --
+# so a head scored on it can copy its answer out of its own input.
+#
+#   train   stochastic, exactly as in training (reproduces the old val/*)
+#   oracle  the inference prompt with the true subtask: what the runtime
+#           feeds the policy when the planner tracks the subtask perfectly
+#   blind   "Task: <neutral>." only -- nothing about the answer
+PROMPT_MODES = ("train", "oracle", "blind")
+
 
 class MVLADatasetWrapper(Dataset):
     """A LeRobotDataset whose samples carry MVLA's prompt and targets."""
 
-    def __init__(self, dataset, config: MVLAConfig, root=None, seed: int = 0):
+    def __init__(self, dataset, config: MVLAConfig, root=None, seed: int = 0, prompt_mode: str = "train"):
+        if prompt_mode not in PROMPT_MODES:
+            raise ValueError(f"prompt_mode must be one of {PROMPT_MODES}, got {prompt_mode!r}")
         self.dataset = dataset
         self.config = config
+        self.prompt_mode = prompt_mode
         self.root = dataset_root(root if root is not None else dataset)
         self.builder = PromptBuilder(config, random.Random(seed))
 
@@ -110,6 +125,15 @@ class MVLADatasetWrapper(Dataset):
     def _build_prompt(self, row: int, episode: int) -> str:
         cfg = self.config
         subtask_index = int(self._subtask[row])
+        neutral = self._neutral.get(episode, self._task.get(episode, ""))
+        if self.prompt_mode == "blind":
+            return self.builder.build_unconditional(neutral)
+        if self.prompt_mode == "oracle":
+            return self.builder.build_inference(
+                neutral,
+                subtask=self._subtask_sentence.get(subtask_index) or None,
+                speed_bin_value=self._speed.get(episode),
+            )
         fields = PromptFields(
             task=self._task.get(episode, ""),
             subtask=self._subtask_sentence.get(subtask_index) or None,

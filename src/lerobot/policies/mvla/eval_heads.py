@@ -11,9 +11,14 @@
                  의미를 갖는 유일한 헤드)
     value        실패 런 탐지 AUC. 헤드의 존재 이유 그 자체다 -- 실패한
                  시도의 값이 성공한 시도보다 낮게 나오는가
-    리드타임     실패 런에서 값이 임계 아래로 내려간 시점과 런 종료 사이의
-                 시간. 양수여야 조기 경보로 쓸 수 있다
+    정체 경보    `TaskManager.observe_value`의 규칙을 그대로 돌린 결과:
+                 실패 런 중 경보가 울린 비율, 성공 런에서 잘못 울린 비율,
+                 경보 후 런 종료까지 남은 시간
     status       실패 클래스 AUC. 정확도는 위 이유로 보고하지 않는다
+
+⚠️ 예전의 `lead_s@thr`("값이 임계 아래로 처음 내려간 시점")는 폐기했다.
+value 타깃은 성공 런도 -1에서 출발하므로 모든 런이 첫 프레임에 임계 아래에
+있고, 그 지표는 실패 런의 평균 길이를 재고 있었다(`lead_detected`가 항상 1).
 
 모든 집계는 **런 단위**다. 프레임 단위로 세면 긴 런이 짧은 런보다 결과를
 많이 좌우하고, 실패 런 94건이 283,194개의 running 프레임에 묻힌다.
@@ -30,9 +35,12 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from .modeling_mvla import ELAPSED_KEY, TARGET_KEYS, TARGET_NAMES
+from .planner.manager import ManagerConfig
 
-# 실패 경보를 울리는 값 임계. 리드타임은 이 값에 의존하므로 여러 개를 본다.
-LEAD_TIME_THRESHOLDS = (-0.8, -0.6, -0.4)
+# 정체 경보의 지속 시간 조건(초). 매니저 기본값과 그 절반을 본다 -- 절반에서
+# 오경보가 얼마나 늘어나는지가 이 값을 줄일 수 있는지에 대한 답이다.
+STALL_SECONDS = (ManagerConfig.stall_seconds, ManagerConfig.stall_seconds / 2)
+NUM_SUBTASK_LABELS = 6
 
 
 def _auc(scores: np.ndarray, labels: np.ndarray) -> float:
@@ -78,6 +86,8 @@ class HeadMetrics:
     n_runs: int = 0
     n_failed_runs: int = 0
     scalars: dict[str, float] = field(default_factory=dict)
+    # subtask 혼동행렬, 행 = 정답, 열 = 예측 (0..5). wandb에는 안 올라간다.
+    confusion: np.ndarray | None = None
 
     def to_wandb(self, prefix: str = "val") -> dict[str, float]:
         out = {f"{prefix}/{k}": v for k, v in self.scalars.items() if not np.isnan(v)}
@@ -188,6 +198,11 @@ def compute_metrics(
         if valid.any():
             m.scalars["subtask_acc"] = float((pred[valid] == true[valid]).mean())
             m.scalars["subtask_macro_f1"] = _macro_f1(pred[valid], true[valid], n_classes=7)
+            n = NUM_SUBTASK_LABELS
+            conf = np.zeros((n, n), dtype=np.int64)
+            ok = valid & (pred >= 0) & (pred < n)
+            np.add.at(conf, (true[ok], pred[ok]), 1)
+            m.confusion = conf
 
     for name in ("value_subtask", "value_episode"):
         if f"{name}_pred" in preds and f"target_{name}" in preds:
@@ -211,13 +226,20 @@ def compute_metrics(
 
     # 실패 탐지: 런당 최저 예측값을 점수로. 실패는 어느 순간 값이 떨어지면
     # 되는 것이지 내내 낮아야 하는 게 아니다.
+    #
+    # 다만 성공 런도 -1에서 출발하므로 최저값은 런 시작부에 좌우되기 쉽다.
+    # 그래서 런 평균값 점수도 함께 낸다: 성공 런은 평균 -0.5 근처, 실패 런은
+    # -1 근처라 시작부 하나에 흔들리지 않는다.
     if "value_subtask_pred" in preds:
-        scores, labels = [], []
+        scores, mean_scores, labels = [], [], []
         for r in uniq:
             sel = run_id == r
-            scores.append(-float(preds["value_subtask_pred"][sel].min()))  # 낮을수록 실패 -> 부호 반전
+            v = preds["value_subtask_pred"][sel]
+            scores.append(-float(v.min()))  # 낮을수록 실패 -> 부호 반전
+            mean_scores.append(-float(v.mean()))
             labels.append(int(failed[sel][0]))
         m.scalars["failure_auc_value"] = _auc(np.array(scores), np.array(labels))
+        m.scalars["failure_auc_value_mean"] = _auc(np.array(mean_scores), np.array(labels))
 
     if "status_p_failure" in preds:
         scores, labels = [], []
@@ -227,27 +249,51 @@ def compute_metrics(
             labels.append(int(failed[sel][0]))
         m.scalars["failure_auc_status"] = _auc(np.array(scores), np.array(labels))
 
-    # 리드타임: 실패 런에서 경보가 울린 뒤 런이 끝나기까지 남은 시간.
-    # 음수면 런이 끝난 뒤에야 알아차렸다는 뜻이고, 그건 경보가 아니다.
-    if "value_subtask_pred" in preds and "elapsed" in preds:
-        for thr in LEAD_TIME_THRESHOLDS:
-            leads = []
+    # 정체 경보: 매니저가 런타임에 실제로 쓰는 규칙을 런마다 돌린다.
+    # 시간은 런 안의 프레임 번호에서 계산한다 -- 입력으로 준 elapsed는
+    # 폐루프 평가에서 정답이 아니라 추적한 값이라 기준이 될 수 없다.
+    if "value_subtask_pred" in preds:
+        stall_value = ManagerConfig.stall_value
+        for secs in STALL_SECONDS:
+            detected, false_alarm, leads = [], [], []
             for r in uniq:
                 sel = run_id == r
-                if not failed[sel][0]:
-                    continue
-                v = preds["value_subtask_pred"][sel]
-                t = preds["elapsed"][sel] * elapsed_scale  # 초로 되돌린다
-                below = np.flatnonzero(v < thr)
-                if len(below) == 0:
-                    leads.append(0.0)  # 끝까지 경보 없음
-                    continue
-                leads.append(float(t.max() - t[below[0]]))
+                order = np.argsort(idx[sel])
+                v = preds["value_subtask_pred"][sel][order]
+                t = (idx[sel][order] - idx[sel].min()) / fps
+                alarm = _stall_alarm_time(v, t, stall_value, secs)
+                if failed[sel][0]:
+                    detected.append(alarm is not None)
+                    if alarm is not None:
+                        leads.append(float(t[-1] - alarm))
+                else:
+                    false_alarm.append(alarm is not None)
+            tag = f"{secs:g}s"
+            if detected:
+                m.scalars[f"stall_detect@{tag}"] = float(np.mean(detected))
+            if false_alarm:
+                m.scalars[f"stall_false_alarm@{tag}"] = float(np.mean(false_alarm))
             if leads:
-                m.scalars[f"lead_s@{abs(thr):.1f}"] = float(np.mean(leads))
-                m.scalars[f"lead_detected@{abs(thr):.1f}"] = float(np.mean([l > 0 for l in leads]))
+                m.scalars[f"stall_lead_s@{tag}"] = float(np.mean(leads))
 
     return m
+
+
+def _stall_alarm_time(v: np.ndarray, t: np.ndarray, stall_value: float, secs: float) -> float | None:
+    """`TaskManager.observe_value`와 같은 규칙: 값이 바닥에 `secs`초 머물면 경보.
+
+    경보 시각을 반환하고, 끝까지 안 울리면 None.
+    """
+    stalled = 0.0
+    for i in range(1, len(v)):
+        dt = float(t[i] - t[i - 1])
+        if v[i] <= stall_value:
+            stalled += dt
+            if stalled >= secs:
+                return float(t[i])
+        else:
+            stalled = 0.0
+    return None
 
 
 def build_run_lookup(root) -> dict[int, tuple[int, bool]]:

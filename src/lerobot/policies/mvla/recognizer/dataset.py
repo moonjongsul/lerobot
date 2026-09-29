@@ -111,8 +111,9 @@ def _release_frames(root) -> dict[int, int]:
     `observation.state`. Consistent across the dataset: it lands ~64% of the
     way through the run with ~3 s of retraction after it.
     """
+    # `load_frames` is lru-cached, so it takes a str root and a tuple of columns.
     frames = load_frames(
-        root, ["episode_index", "frame_index", "subtask_index", "observation.state"]
+        str(dataset_root(root)), ("episode_index", "frame_index", "subtask_index", "observation.state")
     )
     state = np.stack(frames["observation.state"].to_numpy())
     gripper = state[:, 6]

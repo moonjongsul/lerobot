@@ -244,6 +244,11 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         # is neither train nor test.
         val_cfg.dataset.image_transforms.enable = False
         val_dataset = make_dataset(val_cfg)
+        # MVLA's training prompt carries the true subtask and the run's
+        # `Mistake:` flag, and the heads read the prompt -- scored on it they
+        # can copy the answer. The blind prompt gives them nothing to copy.
+        if hasattr(val_dataset, "prompt_mode"):
+            val_dataset.prompt_mode = "blind"
         if is_main_process:
             logging.info(
                 f"Held-out set: {val_dataset.num_episodes} episodes, "
