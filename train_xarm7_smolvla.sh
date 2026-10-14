@@ -60,7 +60,18 @@ SPLIT_FILE="$(dirname "$0")/split_260923.json"
 TRAIN_EPISODES="$(python -c "import json;print('['+','.join(map(str,json.load(open('${SPLIT_FILE}'))['train']))+']')")"
 
 # 데이터셋 카메라 키 -> smolvla_base가 기대하는 camera1/2/3 슬롯
-RENAME_MAP='{"observation.images.env": "observation.images.camera1", "observation.images.wrist_front": "observation.images.camera2", "observation.images.wrist_rear": "observation.images.camera3"}'
+# ── 학습에 쓸 state ────────────────────────────────────────────────
+# 정책은 항상 `observation.state` 키를 state로 읽습니다. 다른 state를 쓰려면
+# 그 키를 `observation.state`로, 원래 `observation.state`(eef velocity)는
+# 다른 이름으로 맞바꿉니다(이름이 겹치면 배치 dict 순서에 따라 어느 쪽이
+# 남을지 달라짐). stats도 lerobot_train에서 같은 rename_map으로 바뀝니다.
+#   ''          : observation.state           (8, eef velocity + gripper + effort)
+#   'eef_rot6d' : observation.state.eef_rot6d (11, xyz + rot6d + gripper + effort)
+#   'eef_quat'  : observation.state.eef_quat  (9, xyz + quat + gripper + effort)
+STATE_KEY=''
+STATE_RENAME=''
+[[ -n ${STATE_KEY} ]] && STATE_RENAME="\"observation.state\": \"observation.state.eef_velocity\", \"observation.state.${STATE_KEY}\": \"observation.state\""
+RENAME_MAP="{\"observation.images.env\": \"observation.images.camera1\", \"observation.images.wrist_front\": \"observation.images.camera2\", \"observation.images.wrist_rear\": \"observation.images.camera3\"${STATE_RENAME:+, ${STATE_RENAME}}}"
 
 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True CUDA_VISIBLE_DEVICES=${CUDA_DEVICES} accelerate launch \
   --num_processes=${NUM_GPUS} \

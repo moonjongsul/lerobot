@@ -1096,6 +1096,14 @@ class PI05Policy(PreTrainedPolicy):
                 logging.warning(f"Skipping state_proj key in pi05 mode: {key}")
                 continue
 
+            # transformers v5 drops the `vision_model` level under PaliGemma's vision_tower,
+            # but pi05_base was saved with it. Strip it when the live model has no such level,
+            # otherwise the strict load fails and the policy silently trains from scratch.
+            if ".vision_tower.vision_model." in new_key and not hasattr(
+                self.model.paligemma_with_expert.paligemma.model.vision_tower, "vision_model"
+            ):
+                new_key = new_key.replace(".vision_tower.vision_model.", ".vision_tower.")
+
             # Handle vision tower embedding layer potential differences
             if "patch_embedding" in key:
                 # Some checkpoints might have this, but current model expects different structure

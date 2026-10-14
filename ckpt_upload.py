@@ -4,18 +4,19 @@ from huggingface_hub import HfApi, create_repo
 
 
 HF_USER = 'moonjongsul'
-PROJECT = 'kcare_open_drawer_260601'
+PROJECT = 'mvla_recognizer_split_260923'
 REPO_ID = f'{HF_USER}/{PROJECT}'
 
-LOCAL_PATH = f"/data/keti/mjs/lerobot/outputs/smolvla_drawer_open_joint_a6000_b24x4_260601/checkpoints"
+# LOCAL_PATH = f"./checkpoints/outputs/mvla_xarm7_eef_velocity_s4_split_H200_b90x4_260923/checkpoints"
+LOCAL_PATH = f"./checkpoints/outputs/smolvla_xarm7_eef_velocity_split_H200_b90x4_260923/checkpoints"
 CKPTS = [
-    "best_step_163900_loss_0.029579",
-    "best_step_152400_loss_0.030344",
-    "best_step_128500_loss_0.035484",
-    "best_step_157800_loss_0.030116",
+    "050000",
+    "best_step_046800_loss_0.024773",
+    "best_step_046600_loss_0.025172",
 ]
 CKPTS = [f"{LOCAL_PATH}/{str(ckpt)}" for ckpt in CKPTS]
 
+# CKPTS = ['./checkpoints/outputs/mvla_recognizer_split_260923']
 
 def main():
     api = HfApi()
