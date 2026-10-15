@@ -34,7 +34,13 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from ..data.segments import dataset_root, load_frames, runs_frame, subtask_names
+from ..data.segments import (
+    dataset_root,
+    load_frames,
+    runs_frame,
+    state_channel,
+    subtask_names,
+)
 
 # Offsets from the gripper-opening frame, in frames at 30 fps.
 RELEASE_OFFSETS = (8, 18, 28)
@@ -116,7 +122,9 @@ def _release_frames(root) -> dict[int, int]:
         str(dataset_root(root)), ("episode_index", "frame_index", "subtask_index", "observation.state")
     )
     state = np.stack(frames["observation.state"].to_numpy())
-    gripper = state[:, 6]
+    # Resolved by name: the state layout grew from 8 to 18 channels and the
+    # gripper moved from index 6 to 16.
+    gripper = state[:, state_channel(str(dataset_root(root)), "gripper")]
     runs = runs_frame(root)
     ep_start = frames.groupby("episode_index").apply(
         lambda g: g.index[0], include_groups=False

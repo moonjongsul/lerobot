@@ -27,6 +27,7 @@ Those two give 1368 runs: 1274 successful, 94 failed, over 284562 frames.
 from __future__ import annotations
 
 import functools
+import json
 from pathlib import Path
 
 import numpy as np
@@ -47,6 +48,29 @@ def dataset_root(root) -> Path:
     if isinstance(root, (str, Path)):
         return Path(root)
     return Path(root.root)
+
+
+@functools.lru_cache(maxsize=4)
+def state_channel(root_str: str, name: str, feature: str = "observation.state") -> int:
+    """Index of a named channel in `observation.state`, from meta/info.json.
+
+    Resolved by name rather than hardcoded, because the state layout is set
+    by max_data_collect's conversion config and has changed: it was 8 wide
+    (eef velocity + gripper + effort, gripper at 6) and is now 18 (eef
+    position, rot6d, j1..j7, gripper, effort, gripper at 16). An index
+    baked in here reads a joint angle as a gripper position and the error is
+    silent, so the name is the contract.
+    """
+    info = json.loads((Path(root_str) / "meta" / "info.json").read_text())
+    names = (info.get("features", {}).get(feature, {}) or {}).get("names")
+    if not names:
+        raise KeyError(f"{feature} has no channel names in {root_str}/meta/info.json")
+    # LeRobot writes `names` either as a flat list or as {"motors": [...]}.
+    if isinstance(names, dict):
+        names = next(iter(names.values()))
+    if name not in names:
+        raise KeyError(f"{feature} has no channel {name!r}; it has {list(names)}")
+    return list(names).index(name)
 
 
 @functools.lru_cache(maxsize=4)
