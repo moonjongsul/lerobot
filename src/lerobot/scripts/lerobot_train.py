@@ -177,7 +177,8 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
     if accelerator is None:
         from accelerate.utils import DistributedDataParallelKwargs
 
-        ddp_kwargs = DistributedDataParallelKwargs(find_unused_parameters=True)
+        # gradient_as_bucket_view avoids keeping a second full copy of the gradients in DDP buckets
+        ddp_kwargs = DistributedDataParallelKwargs(find_unused_parameters=True, gradient_as_bucket_view=True)
         # Accelerate auto-detects the device based on the available hardware and ignores the policy.device setting.
         # Force the device to be CPU when policy.device is set to CPU.
         force_cpu = cfg.policy.device == "cpu"

@@ -4,15 +4,12 @@ from huggingface_hub import HfApi, create_repo
 
 
 HF_USER = 'moonjongsul'
-PROJECT = 'kcare_open_drawer_260601'
+PROJECT = 'smolvla_open_drawer_a6000_b32x2_resume_260730'
 REPO_ID = f'{HF_USER}/{PROJECT}'
 
-LOCAL_PATH = f"/data/keti/mjs/lerobot/outputs/smolvla_drawer_open_joint_a6000_b24x4_260601/checkpoints"
+LOCAL_PATH = f"/data/keti/mjs/lerobot/outputs/{PROJECT}/checkpoints"
 CKPTS = [
-    "best_step_163900_loss_0.029579",
-    "best_step_152400_loss_0.030344",
-    "best_step_128500_loss_0.035484",
-    "best_step_157800_loss_0.030116",
+    "best_step_0399400_loss_0.003570",
 ]
 CKPTS = [f"{LOCAL_PATH}/{str(ckpt)}" for ckpt in CKPTS]
 
@@ -42,3 +39,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
