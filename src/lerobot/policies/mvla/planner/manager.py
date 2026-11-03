@@ -96,7 +96,7 @@ class TaskManager:
     def begin(self, mat_label: str, holding: bool) -> ManagerState:
         object_state = state_from_recognizer(mat_label, holding)
         try:
-            plan = make_plan(self.config.goal, object_state)
+            plan = self._plan_for(object_state)
         except UnplannableState as exc:
             empty = Plan(goal=self.config.goal, state=object_state, task_prompt="", subtasks=[])
             self.state = ManagerState(
@@ -180,6 +180,17 @@ class TaskManager:
             return state
         return self._fail(subtask, reason)
 
+    # ───────────────────────────────────────────────────────── plan source
+    # Both hooks are overridden by max_ai's manager node to put the planner
+    # in its own process. Only the plan comes from there: the retry budget
+    # stays here, so swapping the planner -- for a VLM, say -- cannot quietly
+    # change how many times the cell will re-grab a part.
+    def _plan_for(self, object_state: str) -> Plan:
+        return make_plan(self.config.goal, object_state)
+
+    def _replan_for(self, plan: Plan, failed_subtask: str) -> Plan:
+        return replan_after_failure(plan, failed_subtask)
+
     # ───────────────────────────────────────────────────────── internals
     def _passes(self, subtask: str, verdict: dict) -> bool:
         probs = verdict.get("probs", {})
@@ -220,7 +231,7 @@ class TaskManager:
             state.reason = f"{subtask}: {reason}; retry budget exhausted"
             return state
         try:
-            state.plan = replan_after_failure(state.plan, subtask)
+            state.plan = self._replan_for(state.plan, subtask)
         except UnplannableState as exc:
             state.outcome = Outcome.NEEDS_OPERATOR
             state.reason = str(exc)
