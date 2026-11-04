@@ -74,6 +74,9 @@ class TrainPipelineConfig(HubMixin):
     # Minimum step before tracking best-loss checkpoints. Loss is volatile early in training,
     # so saving the lowest-loss snapshot only after this warmup avoids capturing a noisy minimum.
     best_loss_warmup_step: int = 20_000
+    # Number of most recent best-loss checkpoints to keep; older ones are deleted to save disk.
+    # Set to 0 or a negative value to keep all of them.
+    keep_best_checkpoints: int = 3
     use_policy_training_preset: bool = True
     optimizer: OptimizerConfig | None = None
     scheduler: LRSchedulerConfig | None = None

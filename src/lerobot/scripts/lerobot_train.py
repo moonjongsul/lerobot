@@ -15,8 +15,11 @@
 # limitations under the License.
 import dataclasses
 import logging
+import platform
+import shutil
 import time
 from contextlib import nullcontext
+from pathlib import Path
 from pprint import pformat
 from typing import Any
 
@@ -56,6 +59,21 @@ from lerobot.utils.utils import (
     init_logging,
     inside_slurm,
 )
+
+
+def prune_best_checkpoints(checkpoints_dir: Path, keep: int) -> None:
+    """Keep only the `keep` most recent `best_step_*` checkpoints, deleting older ones.
+
+    Best checkpoints are only saved when the loss improves, so the most recent
+    steps are also the lowest losses.
+    """
+    best_dirs = sorted(
+        (d for d in checkpoints_dir.glob("best_step_*_loss_*") if d.is_dir()),
+        key=lambda d: int(d.name.split("_")[2]),
+    )
+    for old_dir in best_dirs[:-keep]:
+        logging.info(f"Removing old best checkpoint {old_dir}")
+        shutil.rmtree(old_dir, ignore_errors=True)
 
 
 def update_policy(
@@ -170,6 +188,12 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         accelerator: Optional Accelerator instance. If None, one will be created automatically.
     """
     cfg.validate()
+
+    # On aarch64 (e.g. Jetson Thor), oneDNN's JIT conv crashes inside forked DataLoader
+    # workers ("RuntimeError: label is too far" / "bad err=3 in Xbyak::Error"), e.g. in the
+    # SharpnessJitter image transform. Only CPU ops use oneDNN, so GPU training is unaffected.
+    if platform.machine() == "aarch64":
+        torch.backends.mkldnn.enabled = False
 
     # Create Accelerator if not provided
     # It will automatically detect if running in distributed mode or single-process mode
@@ -549,7 +573,9 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
                 )
                 if wandb_logger:
                     wandb_logger.log_policy(best_checkpoint_dir)
-                    
+                if cfg.keep_best_checkpoints > 0:
+                    prune_best_checkpoints(cfg.output_dir / CHECKPOINTS_DIR, cfg.keep_best_checkpoints)
+
             accelerator.wait_for_everyone()
 
         if val_dataset is not None and is_eval_step and is_main_process:
