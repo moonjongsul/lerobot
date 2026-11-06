@@ -24,6 +24,7 @@ __pypackages__/
 node_modules/
 checkpoints/
 Log/
+base/
 
 # Lock files
 poetry.lock

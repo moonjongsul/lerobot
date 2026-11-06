@@ -20,25 +20,25 @@ set -euo pipefail
 
 # Hub의 데이터셋 (upload_to_hub.py로 올린 repo). 첫 실행 때
 # $HF_LEROBOT_HOME/<repo_id>로 받아 캐시한다.
-DATASET='moonjongsul/xarm7-kit-tray-261104'
+DATASET='moonjongsul/xarm7_kitting_kit_add_tray_merged_261106'
 TRAIN_NAME='smolvla_xarm7_rot6d+joint_to_eef_velocity_kit_add_tray'
-DATE='261104'
+DATE='261106'
 
 SAVE_PATH="$HOME/workspace/lerobot/checkpoints"
 BASE_DIR="$HOME/workspace/lerobot/base/smolvla_base_4cam"
-WANDB=false
+WANDB=true
 
 MACHINE='pro6000'
 CUDA_DEVICES=0
-NUM_WORKER=8
+NUM_WORKER=16
 # GPU 메모리에 맞춰 조정. H200에서 카메라 3대 기준 90이 들어갔고, 카메라가
 # 4대라 이미지 토큰이 1/3 늘어난다. 대략 24GB: 12~16, 48GB: 32, 80GB: 56.
 # OOM이 나면 줄이고, 첫 수백 스텝의 메모리 사용량을 보고 올린다.
-BATCH_SIZE=56
+BATCH_SIZE=46       # 44 - 87gb, 46 - 91gb, 48 - 95gb
 # 기존 full 학습 = 약 63 epoch (360 x 50k / 284,562). 같은 epoch 수를 맞추면
 # 배치가 작아진 만큼 스텝이 늘어난다: 63 x 110,196 / 56 ≈ 122k 스텝.
 # 시간이 부족하면 EPOCHS를 줄인다 (데이터가 적어 과적합 쪽이기도 하다).
-DATASET_FRAMES=110196
+DATASET_FRAMES=163196
 EPOCHS=50
 TOTAL_STEP=$(( EPOCHS * DATASET_FRAMES / BATCH_SIZE ))
 # LR 코사인 감쇠가 끝나는 지점. TOTAL_STEP과 같아야 학습 종료 시점에
